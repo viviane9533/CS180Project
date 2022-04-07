@@ -7,6 +7,7 @@ django-cors-headers==3.11.0
 djangorestframework==3.13.1
 filelock==3.6.0
 Flask==2.1.1
+gunicorn==20.1.0
 itsdangerous==2.1.2
 Jinja2==3.1.1
 MarkupSafe==2.1.1
