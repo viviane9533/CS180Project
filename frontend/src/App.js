@@ -10,7 +10,7 @@ function App() {
   const [getMessage, setGetMessage] = useState({})
 
   useEffect(()=>{
-    axios.get('https://react-projectcs180.herokuapp.com/flask/hello').then(response => {
+    axios.get('http://127.0.0.1:5000/flask/hello').then(response => {
       console.log("SUCCESS", response)
       setGetMessage(response)
     }).catch(error => {
@@ -22,7 +22,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>React + Flask Tutorial</p>
+        <p>GM FOX</p>
         <div>{getMessage.status === 200 ? 
           <h3>{getMessage.data.message}</h3>
           :
