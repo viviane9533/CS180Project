@@ -1,4 +1,5 @@
 import logo from './logo.svg';
+import Datatable from "./datatable"
 import './App.css';
 
 import React, { useEffect, useState } from 'react';
@@ -7,12 +8,13 @@ import axios from 'axios'
 
 function App() {
 
-  const [getMessage, setGetMessage] = useState({})
+  const [getData, setData] = useState({})
+  const [getQuery, setQuery] = useState("")
 
   useEffect(()=>{
     axios.get('http://127.0.0.1:5000/flask/Import').then(response => {
       console.log("SUCCESS", response)
-      setGetMessage(response)
+      setData(response)
     }).catch(error => {
       console.log(error)
     })
@@ -20,14 +22,19 @@ function App() {
   }, [])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>GM FOX</p>
-        <div>{getMessage.status === 200 ? 
-          <h3>{getMessage.data.message}</h3>
+      
+      <p>GM FOX</p>
+        <div>{getData.status === 200 ? 
+          <h3>{getData.data.message[6][0]}</h3>
           :
           <h3>LOADING</h3>}</div>
-      </header>
+
+        <div> filter goes here </div>
+        <div> {getData.status === 200 ? 
+          <Datatable data={getData.data.message}/>
+           :
+          <h3>LOADING</h3>}
+        </div>
     </div>
   );
 }

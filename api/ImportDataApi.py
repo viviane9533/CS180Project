@@ -9,7 +9,7 @@ class ImportDataApi(Resource):
   def get(self):
     return {
       'resultStatus': 'SUCCESS',
-      'message': json.dumps(cache.get("player_table"))
+      'message': cache.get("player_table")
       }
 
   def post(self):
