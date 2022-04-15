@@ -1,5 +1,5 @@
 import React from "react"
-
+import './index.css'
 export default function Datatable({ data }) {
     const columns = Object.keys(data[0])
     var data_body = new Array()
@@ -9,7 +9,7 @@ export default function Datatable({ data }) {
     }
 
     return (
-    <table cellPadding={0} cellspacing={50}>
+    <table className = "dataTable" cellPadding={0} cellspacing={50}>
         <thead>
             <tr> 
                 {data[0].map((heading) => <th> {heading} </th>)}
