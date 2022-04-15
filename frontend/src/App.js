@@ -1,10 +1,12 @@
 import logo from './logo.svg';
 import Datatable from "./datatable"
 import './App.css';
+import { SearchBar } from './components/searchBar';
+import { putton } from './components/searchBar';
+import TextField from "@mui/material/TextField";
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
-
 
 function App() {
 
@@ -50,12 +52,12 @@ function App() {
 
   return (
     <div className="App">
-      
       <p>GM FOX</p>
-      <div> 
-        < input type="text"  value={getQuery} onChange={(e) => setQuery(e.target.value)} />
+      <div className = "SearchBarContainer"> 
+      <div className = "SearchInputContainer">
+        < input type="text" className = "SearchInput" value={getQuery} onChange={(e) => setQuery(e.target.value)} />
       </div>
-
+      </div>
       <div> {getData.status === 200 ? 
         <Datatable data={search(getData.data.message)}/>
         :

@@ -1,4 +1,4 @@
-from flask import Flask, send_from_directory, request, redirect, url_for
+from flask import Flask
 from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS #comment this on deployment
 from api.HelloApiHandler import HelloApiHandler
