@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify, request
 from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS #comment this on deployment
 from api.HelloApiHandler import HelloApiHandler
@@ -34,6 +34,14 @@ def read_uploaded_file():
     except IOError:
         pass
     return "Unable to read file"
+
+@app.route("/add_player", methods=["POST"], strict_slashes=False)
+def add_articles():
+    player_data = []
+    player_data = request.json['player_data']
+    
+
+    
 
 
 @app.route("/Import", defaults={'path':''})
