@@ -29,7 +29,7 @@ class ImportDataApi(Resource):
     # currently just returning the req straight
     ret_status = request_type
     ret_msg = request_json
-
+    
     if ret_msg:
       message = "Your Message Requested: {}".format(ret_msg)
     else:

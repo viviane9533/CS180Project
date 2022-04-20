@@ -1,4 +1,5 @@
-from flask import Flask, jsonify, request
+from flask import Flask
+#from flask import jsonify, request
 from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS #comment this on deployment
 from api.HelloApiHandler import HelloApiHandler
@@ -27,9 +28,7 @@ cache.init_app(app=app, config={"CACHE_TYPE": "FileSystemCache",'CACHE_DIR': '/t
 cache.set("player_table", playerData)
 @app.route('/read_file', methods=['GET'])
 def read_uploaded_file():
-    
     try:
-        
         return b
     except IOError:
         pass
@@ -37,8 +36,10 @@ def read_uploaded_file():
 
 @app.route("/add_player", methods=["POST"], strict_slashes=False)
 def add_articles():
-    player_data = []
-    player_data = request.json['player_data']
+    new_player = []
+    new_player = request.json['new_player']
+    playerData.append(new_player)
+    return "Added new player"
     
 
     
