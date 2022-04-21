@@ -1,11 +1,11 @@
-from flask import Flask
-#from flask import jsonify, request
+from flask import Flask,send_from_directory, redirect, url_for, jsonify, request
 from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS #comment this on deployment
 from api.HelloApiHandler import HelloApiHandler
 from api.ImportDataApi import ImportDataApi
 # Import cache
 from common import cache
+import atexit
 
 
 app = Flask(__name__, static_url_path='', static_folder='frontend/build')
@@ -26,6 +26,30 @@ b = '\n'.join('\t'.join(x for x in y) for y in playerData)
 cache.init_app(app=app, config={"CACHE_TYPE": "FileSystemCache",'CACHE_DIR': '/tmp'})
 
 cache.set("player_table", playerData)
+
+
+#defining function to run on shutdown
+def updateDB():
+    data_set = []
+    data_set = cache.get("player_table")
+    output_file = open("players2.csv","w")
+    line = ""
+    for entry in data_set:
+        line = ""
+        a=0
+        for item in entry:
+            a+=1
+            line += item
+            if a<4:
+                line += ","
+        #line += "\n"
+        output_file.write(line)
+
+
+#Register the function to be called on exit
+atexit.register(updateDB)
+
+
 @app.route('/read_file', methods=['GET'])
 def read_uploaded_file():
     try:
@@ -39,7 +63,19 @@ def add_articles():
     new_player = []
     new_player = request.json['new_player']
     playerData.append(new_player)
-    return "Added new player"
+    request_data = request.get_json()
+    name = request_data['Student Name'] 
+    course = request_data['Course'] 
+    python_version = request_data['Test Marks']['Mathematics'] 
+    example = request_data['Course Interested'][0]
+    return '''
+     The student name is: {}
+The course applied for is: {}
+The test marks for Mathematics is: {}
+The Course student is interested in is: {}'''.format(name, course, python_version, example)
+
+
+    #return "Added new player"
     
 
     

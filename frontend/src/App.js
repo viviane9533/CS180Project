@@ -24,6 +24,17 @@ function App() {
 
   }, [])
 
+ 
+
+  axios.post("http://127.0.0.1:5000/flask/Import", 
+             { type : "Add" , message : "Kobe Bryant, 1, 1, 22\n"})
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
   function search(rows) {
     var new_rows = new Array()
     var j = 0
