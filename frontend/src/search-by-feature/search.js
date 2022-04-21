@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 function S() {
 
-    const [getData, setData] = useState({})
+    const [getData, setData] = useState([])
     const [getQuery, setQuery] = useState("")
     const [getSearchColumns, setSearchColumns] = useState([0,1,2,3])
   
@@ -16,8 +16,36 @@ function S() {
       })
   
     }, [])
+
+
   
+    const addTableRows = ()=>{
   
+      const rowsInput={
+          PLAYER_NAME:'',
+          TEAM_ID:'',
+          PLAYER_ID:'',
+          SEASON:''
+      } 
+      setData([...getData.data, rowsInput])
+    }
+
+
+    const deleteTableRows = (index)=>{
+      // const rows = [...getData.data];
+      // rows.splice(index, 1);
+      // setData(rows);
+      // alert(index)
+      fetch(`http://127.0.0.1:5000/flask/Import/${index}`,{
+        method:'DELETE'
+      }).then((result)=>{
+        result.json().then((resp)=>{
+          console.warn(resp)
+        })
+      })
+    }
+
+    
     function search(rows) {
       var new_rows = new Array()
       var j = 0
@@ -53,7 +81,7 @@ function S() {
         </div>
   
         <div> {getData.status === 200 ? 
-          <Datatable data={search(getData.data.message)}/>
+          <Datatable data={search(getData.data.message)} deleteTableRows={deleteTableRows} addTableRows={addTableRows}/>
           :
           <h3>LOADING</h3>}
         </div>

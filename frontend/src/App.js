@@ -68,7 +68,7 @@ function App() {
   //   </div>
   // );
   return (
-    <AddDeleteTableRows />
+    <S />
   );
 }
 export default App;

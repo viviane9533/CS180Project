@@ -1,7 +1,7 @@
 import TableRows from "../datatable/TableRows";
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
-// import TableRows from "./TableRows"
+// import search from "./search-by-feature/search"
 function AddDeleteTableRows(){
     const [rowsData, setRowsData] = useState([]);
 
@@ -58,7 +58,6 @@ function AddDeleteTableRows(){
 
                     </thead>
                    <tbody>
-
                    <TableRows rowsData={rowsData} deleteTableRows={deleteTableRows} handleChange={handleChange} />
 
                    </tbody> 
