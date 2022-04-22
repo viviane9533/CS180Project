@@ -18,15 +18,17 @@ function App() {
   const [getSearchColumns, setSearchColumns] = useState([0,3])
 
   useEffect(()=>{
+    freshData();
+  }, [])
+  
+  function freshData() {
     axios.get('http://127.0.0.1:5000/flask/Import').then(response => {
       console.log("SUCCESS", response)
       setData(response)
     }).catch(error => {
       console.log(error)
     })
-
-  }, [])
- 
+  }
 
   // axios.post("http://127.0.0.1:5000/flask/Import", 
   //            { type : "Add" , message : "Kobe Bryant, 1, 1, 22\n"})
@@ -47,7 +49,7 @@ function App() {
   //         });
 
 
-
+  // button function 
   const deleteTableRows = (index)=>{
     var b = getData.data.message[index]
     var a = ''
@@ -62,6 +64,7 @@ function App() {
               { type : "Delete" , message : a })
           .then(function (response) {
             console.log(response);
+            freshData();
           })
           .catch(function (error) {
             console.log(error);

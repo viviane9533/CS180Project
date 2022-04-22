@@ -22,6 +22,7 @@ export default function Datatable({ data, deleteTableRows }) {
                 <tr key={index}>
                     {columns.map((column) => (<td>{row[column]}</td>
                     ))}
+                    {/* button added */}
                     <td><button className="btn btn-outline-danger" onClick={()=>(deleteTableRows(index))}>x</button></td>
                 </tr>
                 
