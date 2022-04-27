@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Unit Tests",
+        "type": "node",
+        "request": "launch",
+        "runtimeExecutable": "${workspaceRoot}/frontend/node_modules/.bin/react-scripts",
+        // "runtimeExecutable": "node",
+        "args": ["test", "--runInBand", "--no-cache", "--env=jsdom"],
+        "cwd": "${workspaceRoot}",
+        "protocol": "inspector",
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen"
+      }
+    ]
+  }

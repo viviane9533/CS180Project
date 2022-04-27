@@ -46,6 +46,7 @@ class ImportDataApi(Resource):
       data.append(new_player)
       #updating cache with new table
       cache.set("player_table", data)
+    
       
 
     elif ret_status == 'Delete':
@@ -69,6 +70,7 @@ class ImportDataApi(Resource):
            
         else:
           continue
+
         
     if ret_msg:
       message = "Your Operation concluded."
