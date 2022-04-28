@@ -2,7 +2,8 @@ import React from "react"
 import '../index.css'
 import Popup from "./add_popup.js"
 import { useState } from 'react'
-
+import { Bar } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 
 export default function Datatable({ data, deleteTableRows, addTableRows, topPlayer }) {
     const [getButtonAddPopup, setButtonAddPopup] = useState(false)
@@ -77,6 +78,8 @@ export default function Datatable({ data, deleteTableRows, addTableRows, topPlay
                     <button onClick={()=>addTableRows(getPlayerName, getTeamID, getPlayerID, getSeason)}>Add Player</button>
                 </form>
             </Popup>
+
+            
         </table>
     </div>
     

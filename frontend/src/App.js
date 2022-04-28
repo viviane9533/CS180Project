@@ -1,11 +1,12 @@
 import logo from './logo.svg';
-import Datatable from "./datatable"
+import Datatable from "./datatable";
+import BarChartComponent from "./datatable/BarComponent.js";
 import './App.css';
-import { SearchBar } from './components/searchBar';
-import { putton } from './components/searchBar';
-import TextField from "@mui/material/TextField";
 
-import React, { useEffect, useState } from 'react';
+import {BarChart, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Bar} from 'recharts';
+
+
+import React, { useEffect, useState , Component} from 'react';
 import axios from 'axios'
 
 
@@ -14,7 +15,6 @@ function App() {
   const [getData, setData] = useState({})
   const [getQuery, setQuery] = useState("")
   const [getSearchColumns, setSearchColumns] = useState([0,3])
-  const [getLongestCareer, setLongestCareer] = useState({})
 
   useEffect(()=>{
     freshData();
@@ -28,7 +28,6 @@ function App() {
       console.log(error)
     })
   }
-  
  
 
   // axios.post("http://127.0.0.1:5000/flask/Import", 
@@ -109,79 +108,21 @@ function App() {
     return new_rows
   }
 
-  function topPlayer(rows) {
-    var new_rows = new Array()
-
-    for (var i = 1; i <= 5; i++) {
-      new_rows[i] = rows[i]
-    }
-
-    return new_rows
-  }
-
-
-
-  // function displayTopPlayer(topPlayer){
-  //   var names = new Array()
-  //   for (var i = 0; i < 5; i++) {
-  //     names[i] = topPlayer[i][0];
-  //   }
-  //   const myChart = new Chart( {
-  //       type: 'bar',
-  //       data: {
-  //           labels: names,
-  //           datasets: [{
-  //               label: '# of Votes',
-  //               data: [25, 22, 19, 16, 15],
-  //               backgroundColor: [
-  //                   'rgba(255, 99, 132, 0.2)',
-  //                   'rgba(54, 162, 235, 0.2)',
-  //                   'rgba(255, 206, 86, 0.2)',
-  //                   'rgba(75, 192, 192, 0.2)',
-  //                   'rgba(153, 102, 255, 0.2)',
-  //               ],
-  //               borderColor: [
-  //                   'rgba(255, 99, 132, 1)',
-  //                   'rgba(54, 162, 235, 1)',
-  //                   'rgba(255, 206, 86, 1)',
-  //                   'rgba(75, 192, 192, 1)',
-  //                   'rgba(153, 102, 255, 1)',
-  //               ],
-  //               borderWidth: 1
-  //           }]
-  //       },
-  //       options: {
-  //           scales: {
-  //               y: {
-  //                   min: 10,
-  //                   max: 25,
-  //               }
-  //           }
-  //       }
-  //   });
-  //   return myChart;
-  // }
-
-
-
-  const columns = getData[0]  
-
-
-  return (
-    <div className="App">
-      <p>GM FOX</p>
-      <div className = "SearchBarContainer"> 
-      <div className = "SearchInputContainer">
-        < input type="text" className = "SearchInput" value={getQuery} onChange={(e) => setQuery(e.target.value)} />
-      </div>
-      </div>
-      <div> {getData.status === 200 ? 
-        <Datatable data={search(getData.data.message)} deleteTableRows={deleteTableRows} addTableRows={addTableRows} topPlayer={topPlayer(getData.data.message)}/>
-        :
-        <h3>LOADING</h3>}
-      </div>
-    </div>
-  );
+    return (
+        <div className="App">
+          <p>GM FOX</p>
+          <div className = "SearchInputContainer">
+            < input type="text" className = "SearchInput" value={getQuery} onChange={(e) => setQuery(e.target.value)} />
+          </div>
+          <BarChartComponent xdata={['player1', 'player2', 'player3', 'player4', 'player5']} ydata={[20, 21, 25, 30, 40]}/>
+          <div> {getData.status === 200 ? 
+            <Datatable data={search(getData.data.message)} deleteTableRows={deleteTableRows} addTableRows={addTableRows}/>
+            :
+            <h3>LOADING</h3>}
+          </div>
+          
+        </div>
+    );
 }
 
 export default App;
