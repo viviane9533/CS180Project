@@ -1,11 +1,9 @@
 import logo from './logo.svg';
-import Datatable from "./datatable"
+import Datatable from "./datatable";
+import BarChartComponent from "./datatable";
 import './App.css';
-import { SearchBar } from './components/searchBar';
-import { putton } from './components/searchBar';
-import TextField from "@mui/material/TextField";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState , Component} from 'react';
 import axios from 'axios'
 
 
@@ -107,23 +105,22 @@ function App() {
     return new_rows
   }
 
-  const columns = getData[0]  
-
-  return (
-    <div className="App">
-      <p>GM FOX</p>
-      <div className = "SearchBarContainer"> 
-      <div className = "SearchInputContainer">
-        < input type="text" className = "SearchInput" value={getQuery} onChange={(e) => setQuery(e.target.value)} />
-      </div>
-      </div>
-      <div> {getData.status === 200 ? 
-        <Datatable data={search(getData.data.message)} deleteTableRows={deleteTableRows} addTableRows={addTableRows}/>
-        :
-        <h3>LOADING</h3>}
-      </div>
-    </div>
-  );
+    return (
+        <div className="App">
+          <p>GM FOX</p>
+          <div className = "SearchInputContainer">
+            < input type="text" className = "SearchInput" value={getQuery} onChange={(e) => setQuery(e.target.value)} />
+          </div>
+          <div>
+            <BarChartComponent xdata={['Blue', 'Green', 'Yellow']} ydata={[10000, 20000, 4000000]}/>
+          </div>
+          <div> {getData.status === 200 ? 
+            <Datatable data={search(getData.data.message)} deleteTableRows={deleteTableRows} addTableRows={addTableRows}/>
+            :
+            <h3>LOADING</h3>}
+          </div>
+        </div>
+    );
 }
 
 export default App;
