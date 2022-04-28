@@ -7,26 +7,25 @@ class ImportDataApi(Resource):
 
 
   def get(self):
-    return {
-      'resultStatus': 'SUCCESS',
-      'message': cache.get("player_table")
-      }
+    return cache.get("player_table")
 
-  def post(self):
-    print(self)
-    parser = reqparse.RequestParser()
-    parser.add_argument('type', type=str)
-    parser.add_argument('message', type=str)
-    parser.add_argument('field', type=str)
-    parser.add_argument('new_val', type=str)
+  def post(self,type, message):
+    
+    #print(self)
+    #for json parsing
+    #parser = reqparse.RequestParser()
+    #parser.add_argument('type', type=str)
+    #parser.add_argument('message', type=str)
+    #parser.add_argument('field', type=str)
+    #parser.add_argument('new_val', type=str)
 
-    args = parser.parse_args()
+    #args = parser.parse_args()
 
     #print(args)
     # note, the post req from frontend needs to match the strings here (e.g. 'type and 'message')
 
-    request_type = args['type']
-    request_json = args['message']
+    #request_type = args['type']
+    #request_json = args['message']
     #try:
      # request_field = args['field']
       #request_new = args['new_val']
@@ -36,22 +35,26 @@ class ImportDataApi(Resource):
 
     # ret_status, ret_msg = ReturnData(request_type, request_json)
     # currently just returning the req straight
-    ret_status = request_type
-    ret_msg = request_json
+    #ret_status = request_type
+    #ret_msg = request_json
     #if status is update, then we have two other fields
-    if ret_status == 'Update':
-      request_field = args['field']
-      request_new = args['new_val']
+    #if ret_status == 'Update':
+      #request_field = args['field']
+      #request_new = args['new_val']
+      #ret_field = request_field
+      #ret_new = request_new
     #grabbing cache to modify
     data = [[]]
     data = cache.get("player_table")
-
-    if ret_status == 'Add':
+    #switching to tpye for test
+    if type == 'Add':
+    #if ret_status == 'Add':
       #perform addition of message to player object
-      print(ret_status)
-      print(ret_msg)
+      #print(ret_status)
+      #print(ret_msg)
       new_player = []
-      new_player = ret_msg.split(",")
+      #new_player = ret_msg.split(",")
+      new_player = message.split(",")
       #NEED TO CHECK IF WE HAVE 4 COLUMNS HERE OR BEFORE DATA IS PASSED BEFORE ADDING TO CACHE
       print(new_player)
       
@@ -81,9 +84,7 @@ class ImportDataApi(Resource):
            
         else:
           continue
-    elif ret_status == 'Edit':
-      #check and see how Jasmine wants to do this, might just call delete, then add 
-        pass
+        
     if ret_msg:
       message = "Your Operation concluded."
     else:

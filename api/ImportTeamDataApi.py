@@ -3,13 +3,13 @@ import json
 from common import cache
 
 
-class ImportDataApi(Resource):
+class ImportTeamDataApi(Resource):
 
 
   def get(self):
     return {
       'resultStatus': 'SUCCESS',
-      'message': cache.get("player_table")
+      'message': cache.get("team_table")
       }
 
   def post(self):
@@ -17,8 +17,6 @@ class ImportDataApi(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('type', type=str)
     parser.add_argument('message', type=str)
-    parser.add_argument('field', type=str)
-    parser.add_argument('new_val', type=str)
 
     args = parser.parse_args()
 
@@ -27,21 +25,11 @@ class ImportDataApi(Resource):
 
     request_type = args['type']
     request_json = args['message']
-    #try:
-     # request_field = args['field']
-      #request_new = args['new_val']
-    #except:
-     # print("No ")
-
-
     # ret_status, ret_msg = ReturnData(request_type, request_json)
     # currently just returning the req straight
     ret_status = request_type
     ret_msg = request_json
-    #if status is update, then we have two other fields
-    if ret_status == 'Update':
-      request_field = args['field']
-      request_new = args['new_val']
+
     #grabbing cache to modify
     data = [[]]
     data = cache.get("player_table")
@@ -81,9 +69,7 @@ class ImportDataApi(Resource):
            
         else:
           continue
-    elif ret_status == 'Edit':
-      #check and see how Jasmine wants to do this, might just call delete, then add 
-        pass
+        
     if ret_msg:
       message = "Your Operation concluded."
     else:
