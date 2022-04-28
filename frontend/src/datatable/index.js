@@ -1,5 +1,5 @@
 import React from "react"
-import '../index.css'
+import './index.css'
 import Popup from "./add_popup.js"
 import { useState } from 'react'
 
