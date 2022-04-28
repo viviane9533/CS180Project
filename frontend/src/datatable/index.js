@@ -20,12 +20,13 @@ export default function Datatable({ data, deleteTableRows, addTableRows }) {
 
     return (
     <div>
-        <button className="btn btn-outline-danger" onClick={()=>setButtonAddPopup(true)}>Add</button>
+        <button className="addbutton" onClick={()=>setButtonAddPopup(true)}>Add New Player</button>
         <table className = "dataTable" cellPadding={0} cellspacing={50}>
             <thead>
                 <tr> 
                     {data[0].map((heading) => <th> {heading} </th>)}
-                    
+                    <th>Edit</th>
+                    <th>Delete</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,7 +35,9 @@ export default function Datatable({ data, deleteTableRows, addTableRows }) {
                     <tr key={index}>
                         {columns.map((column) => (<td>{row[column]}</td>
                         ))}
-                        <td><button className="btn btn-outline-danger" onClick={()=>(deleteTableRows(index))}>x</button></td>
+                        <td><button className="iconbuttons"><i class="fa-solid fa-pen-to-square"></i></button></td>
+                        <td><button className="iconbuttons" onClick={()=>(deleteTableRows(index))}><i class="fa-solid fa-trash-can"></i></button></td>
+
                     </tr>
                     
                 ))}

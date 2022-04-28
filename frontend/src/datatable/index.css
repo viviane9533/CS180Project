@@ -26,3 +26,34 @@
 .dataTable tbody tr:nth-of-type(even) {
     background-color: #f3f3f3;
 }
+.addbutton{
+    margin-top: 2.0em;
+    display: inline-block;
+    margin-right: 10px;
+    background: #307ee5;
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    line-height: 38px;
+    border-radius: 50px;
+    border-color: white;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    width: 170px;
+    text-align: center;
+}
+.addbutton:hover{
+    background: #fff;
+  color: #307ee5;
+  box-shadow: 0 4px 4px rgba(83, 100, 255, 0.32);
+}
+.iconbuttons{
+    color:#307ee5;
+    font-size: 16px; 
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+}
+.iconbuttons:hover {
+    color: RoyalBlue;
+} 
