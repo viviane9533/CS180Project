@@ -3,9 +3,9 @@ import './index.css'
 import Popup from "./add_popup.js"
 import { useState } from 'react'
 
-export default function Datatable({ data, deleteTableRows, addTableRows }) {
+export default function Datatable({ data, deleteTableRows, addTableRows, editTableRows }) {
     const [getButtonAddPopup, setButtonAddPopup] = useState(false)
-
+    const [getButtonEditPopup, setButtonEditPopup] = useState(false)
     const [getPlayerName, setPlayerName] = useState("")
     const [getTeamID, setTeamID] = useState("")
     const [getPlayerID, setPlayerID] = useState("")
@@ -38,7 +38,7 @@ export default function Datatable({ data, deleteTableRows, addTableRows }) {
                     <tr key={index}>
                         {columns.map((column) => (<td>{row[column]}</td>
                         ))}
-                        <td><button className="iconbuttons"><i class="fa-solid fa-pen-to-square"></i></button></td>
+                        <td><button className="iconbuttons" onClick= {()=> {deleteTableRows(index);setButtonEditPopup(true);}} ><i class="fa-solid fa-pen-to-square"></i></button></td>
                         <td><button className="iconbuttons" onClick={()=>(deleteTableRows(index))}><i class="fa-solid fa-trash-can"></i></button></td>
 
                     </tr>
@@ -77,6 +77,40 @@ export default function Datatable({ data, deleteTableRows, addTableRows }) {
                         onChange={(e) => setSeason(e.target.value)}
                     />
                     <button className="addbutton" onClick={()=>addTableRows(getPlayerName, getTeamID, getPlayerID, getSeason)}>Add Player</button>
+                </form>
+            </Popup>
+            <Popup trigger={getButtonEditPopup} setTrigger={setButtonEditPopup}>
+                <h3>Edit Player</h3>
+                <form className="form">
+                    <label> Player name: </label>
+                    <input
+                        type="text"
+                        required
+                        value={getPlayerName}
+                        onChange={(e) => setPlayerName(e.target.value)}
+                    />
+                    <label> Team ID: </label>
+                    <input
+                        type="text"
+                        required
+                        value={getTeamID}
+                        onChange={(e) => setTeamID(e.target.value)}
+                    />
+                    <label> Player ID: </label>
+                    <input
+                        type="text"
+                        required
+                        value={getPlayerID}
+                        onChange={(e) => setPlayerID(e.target.value)}
+                    />
+                    <label> Season: </label>
+                    <input
+                        type="text"
+                        required
+                        value={getSeason}
+                        onChange={(e) => setSeason(e.target.value)}
+                    />
+                    <button className="addbutton" onClick={()=>editTableRows(getPlayerName, getTeamID, getPlayerID, getSeason)}>Apply Changes</button>
                 </form>
             </Popup>
         </table>

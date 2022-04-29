@@ -83,6 +83,20 @@ function App() {
 
           freshData()
   }
+  const editTableRows = (new_name, new_team_id, new_player_id, new_season)=>{
+    var a = new_name + ',' + new_team_id + ',' + new_player_id + ','+ new_season + '\n'
+
+    axios.post("http://127.0.0.1:5000/flask/Import", 
+              { type : "Add" , message : a })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+          freshData()
+  }
 
   function search(rows) {
     var new_rows = new Array()
@@ -125,7 +139,7 @@ function App() {
       </div>
       </div>
       <div> {getData.status === 200 ? 
-        <Datatable data={search(getData.data.message)} deleteTableRows={deleteTableRows} addTableRows={addTableRows}/>
+        <Datatable data={search(getData.data.message)} deleteTableRows={deleteTableRows} addTableRows={addTableRows} editTableRows={editTableRows}/>
         :
         <h3>LOADING</h3>}
       </div>
