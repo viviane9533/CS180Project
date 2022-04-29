@@ -73,7 +73,7 @@ export default function Datatable({ data, deleteTableRows, addTableRows }) {
                         value={getSeason}
                         onChange={(e) => setSeason(e.target.value)}
                     />
-                    <button onClick={()=>addTableRows(getPlayerName, getTeamID, getPlayerID, getSeason)}>Add Player</button>
+                    <button className="addbutton" onClick={()=>addTableRows(getPlayerName, getTeamID, getPlayerID, getSeason)}>Add Player</button>
                 </form>
             </Popup>
         </table>
