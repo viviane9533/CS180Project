@@ -18,6 +18,7 @@ function App() {
   const [getSearchColumns, setSearchColumns] = useState([0,3])
 
 
+
   useEffect(()=>{
     freshData();
   }, [])
@@ -31,13 +32,19 @@ function App() {
     })
   }
 
-  useEffect(()=>{
+  
+
+  function freshCareerData() {
     axios.get('http://127.0.0.1:5000/flask/Export/Longest').then(response => {
       console.log("SUCCESS", response)
       setLongestCareer(response)
     }).catch(error => {
       console.log(error)
     })
+  }
+
+  useEffect(()=>{
+    freshCareerData();
   }, [])
  
 
@@ -80,6 +87,8 @@ function App() {
           });
   }
 
+  
+
   const addTableRows = (new_name, new_team_id, new_player_id, new_season)=>{
     var a = new_name + ',' + new_team_id + ',' + new_player_id + ','+ new_season + '\n'
 
@@ -94,6 +103,8 @@ function App() {
 
           freshData()
   }
+
+  
 
   function search(rows) {
     var new_rows = []
@@ -156,7 +167,13 @@ function App() {
           < input type="text" className = "SearchInput" value={getQuery} onChange={(e) => setQuery(e.target.value)} />
         </div>
         </div>
-        {/* <BarChartComponent xdata={longestCareerYears(getLongestCareer.data.message)} ydata={longestCareerPlayers(getLongestCareer.data.message)}/> */}
+
+        <div> {getLongestCareer.status === 200 ? 
+          <BarChartComponent xdata={longestCareerYears(getLongestCareer.data.message)} ydata={longestCareerPlayers(getLongestCareer.data.message)}/>
+          :
+          <h3>LOADING</h3>}
+        </div>
+
         <div> {getData.status === 200 ? 
           <Datatable data={search(getData.data.message)} deleteTableRows={deleteTableRows} addTableRows={addTableRows}/>
           :
