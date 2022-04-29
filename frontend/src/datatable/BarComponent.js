@@ -23,8 +23,8 @@ import {BarChart, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Bar} from 'recha
             // data = {data}
             margin={{
             top: 5,
-            right: 130,
-            left: 180,
+            right: 200,
+            left: 5,
             bottom: 5,
             }}
             barSize={50}
