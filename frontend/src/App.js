@@ -115,8 +115,8 @@ function App() {
       <div className = "sidebar">
       <div><button className = "homeicon"><i class="fa-solid fa-house"></i></button></div>
     <div><button className = "graphIcons" onClick={()=>setButtonGraph1Popup(true)}><i class="fa-solid fa-chart-area"></i></button></div>
-    <div><button className = "graphIcons"><i class="fa-solid fa-chart-column"></i></button></div>
-    <div><button className = "graphIcons"><i class="fa-regular fa-chart-bar"></i></button></div>
+    <div><button className = "graphIcons" onClick={()=>setButtonGraph1Popup(true)}><i class="fa-solid fa-chart-column"></i></button></div>
+    <div><button className = "graphIcons" onClick={()=>setButtonGraph1Popup(true)}><i class="fa-regular fa-chart-bar"></i></button></div>
     </div>
       <p>GM FOX</p>
       <div className = "SearchBarContainer"> 
@@ -130,6 +130,7 @@ function App() {
         <h3>LOADING</h3>}
       </div>
       <Popup trigger={getButtonGraph1Popup} setTrigger={setButtonGraph1Popup}>
+      <p>Graph</p>
       <BarChartComponent xdata={['player1', 'player2', 'player3', 'player4', 'player5']} ydata={[20, 21, 25, 30, 40]}/>
         </Popup>
     </div>

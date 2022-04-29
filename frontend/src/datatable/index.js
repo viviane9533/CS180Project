@@ -24,7 +24,10 @@ export default function Datatable({ data, deleteTableRows, addTableRows }) {
         <table className = "dataTable" cellPadding={0} cellspacing={50}>
             <thead>
                 <tr> 
-                    {data[0].map((heading) => <th> {heading} </th>)}
+                    <th>Player Name</th>
+                    <th>Team ID</th>
+                    <th>Player ID</th>
+                    <th>Season</th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>
