@@ -5,6 +5,7 @@ import { useState } from 'react'
 
 export default function Datatable({ data, deleteTableRows, addTableRows, editTableRows }) {
     const [getButtonAddPopup, setButtonAddPopup] = useState(false)
+    const [getIndex,setIndex] = useState(false)
     const [getButtonEditPopup, setButtonEditPopup] = useState(false)
     const [getPlayerName, setPlayerName] = useState("")
     const [getTeamID, setTeamID] = useState("")
@@ -38,7 +39,7 @@ export default function Datatable({ data, deleteTableRows, addTableRows, editTab
                     <tr key={index}>
                         {columns.map((column) => (<td>{row[column]}</td>
                         ))}
-                        <td><button className="iconbuttons" onClick= {()=> {deleteTableRows(index);setPlayerName(row[0]);setTeamID(row[1]);setPlayerID(row[2]);setSeason(row[3]);setButtonEditPopup(true);}} ><i class="fa-solid fa-pen-to-square"></i></button></td>
+                        <td><button className="iconbuttons" onClick= {()=> {setIndex(index);setPlayerName(row[0]);setTeamID(row[1]);setPlayerID(row[2]);setSeason(row[3]);setButtonEditPopup(true);}} ><i class="fa-solid fa-pen-to-square"></i></button></td>
                         <td><button className="iconbuttons" onClick={()=>(deleteTableRows(index))}><i class="fa-solid fa-trash-can"></i></button></td>
 
                     </tr>
@@ -83,7 +84,7 @@ export default function Datatable({ data, deleteTableRows, addTableRows, editTab
                 <h3>Edit Player</h3>
                 <form className="form">
                     <label> Player name: </label>
-                    <input
+                    <input className = "input"
                         type="text"
                         defaultValue = {getPlayerName}
                         placeholder = {getPlayerName}
@@ -91,7 +92,7 @@ export default function Datatable({ data, deleteTableRows, addTableRows, editTab
                         onChange={(e) => setPlayerName(e.target.value)}
                     />
                     <label> Team ID: </label>
-                    <input
+                    <input className = "input"
                         type="text"
                         defaultValue = {setTeamID}
                         placeholder = {setTeamID}
@@ -100,7 +101,7 @@ export default function Datatable({ data, deleteTableRows, addTableRows, editTab
                         onChange={(e) => setTeamID(e.target.value)}
                     />
                     <label> Player ID: </label>
-                    <input
+                    <input className = "input"
                         type="text"
                         defaultValue = {setPlayerID}
                         placeholder = {setPlayerID}
@@ -109,7 +110,7 @@ export default function Datatable({ data, deleteTableRows, addTableRows, editTab
                         onChange={(e) => setPlayerID(e.target.value)}
                     />
                     <label> Season: </label>
-                    <input
+                    <input className = "input"
                         type="text"
                         defaultValue = {setSeason}
                         placeholder = {setSeason}
@@ -117,7 +118,7 @@ export default function Datatable({ data, deleteTableRows, addTableRows, editTab
                         value={getSeason}
                         onChange={(e) => setSeason(e.target.value)}
                     />
-                    <button className="addbutton" onClick={()=>editTableRows(getPlayerName, getTeamID, getPlayerID, getSeason)}>Apply Changes</button>
+                    <button className="addbutton" onClick={()=>{deleteTableRows(getIndex);editTableRows(getPlayerName, getTeamID, getPlayerID, getSeason)}}>Apply Changes</button>
                 </form>
             </Popup>
         </table>
