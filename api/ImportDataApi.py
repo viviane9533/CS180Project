@@ -1,3 +1,4 @@
+from urllib import request
 from flask_restful import Api, Resource, reqparse
 import json
 from common import cache
@@ -78,12 +79,24 @@ class ImportDataApi(Resource):
           data.remove(list)
           # #updating cache with new table
           cache.set("player_table", data)
-           
+          
         else:
           continue
-    elif ret_status == 'Edit':
+    elif ret_status == 'Update':
       #check and see how Jasmine wants to do this, might just call delete, then add 
-        pass
+      #going to use the two fields to update
+      update_player = []
+      update_player = ret_msg.split(",")
+      for list in data:
+        
+        if list[3] == update_player[3] and list[2] == update_player[2] and list[1] == update_player[1] and list[0] == update_player[0]:
+          print("Updating player")
+          #field will be 0, 1, 2, or 3 for this table
+          list[request_field] = request_new
+          # #updating cache with new table
+          cache.set("player_table", data)
+
+          
     if ret_msg:
       message = "Your Operation concluded."
     else:

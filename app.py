@@ -27,11 +27,14 @@ with open('teams.csv', 'r') as inputfile:
         teamData.append(line.split(","))
 
 
+
+
 #set up and add data to cache
 cache.init_app(app=app, config={"CACHE_TYPE": "FileSystemCache",'CACHE_DIR': '/tmp'})
 
 cache.set("player_table", playerData)
 cache.set("team_table", teamData)
+
 
 #defining function to run on shutdown
 def updateDB():

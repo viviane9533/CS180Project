@@ -1,4 +1,5 @@
 from flask_restful import Api, Resource, reqparse
+from operator import itemgetter
 import json
 import threading
 import time
@@ -6,6 +7,7 @@ from common import cache
 
 #player number and count
 pnum_count = [[]]
+
 
 #base table to analyze
 p_analyze = [[]]
@@ -20,28 +22,30 @@ t_stop = False
 #search through new player table and talley player's years in the league
 def search_and_talley(self,p_num):
     #talley, but each will start at a different number
-    current_pid = 0
-    current_count = 0
-    for line in range(p_num,7228):
+    
+    for line in range(p_num,len(p_analyze)):
+      current_pid = 0
+      current_count = 0
       years = [""]
+      
       #check if threads need to stop as everything has been hit
-      if t_stop == True:
-        break
+      #if t_stop == True:
+       # break
       #check if it has been used already, if not continue
-      try:
-        if p_analyze[line][4] == 0:
+      #try:
+      if p_analyze[line][4] == 0:
         #we can use, and write it is in use
-          p_analyze[line][4] = 1
+        p_analyze[line][4] = 1
         #player id is in third column
-          current_pid = p_analyze[line][2]
-          current_count = 1
+        current_pid = p_analyze[line][2]
+        current_count = 1
           #add year to years for later check, in col 3
-          years[0] = p_analyze[line][3]
-        else:
-          continue
-      except IndexError:
-        print(line)
-        print(" Line number giving error \n")
+        years[0] = p_analyze[line][3]
+      else:
+        continue
+      #except IndexError:
+       # print(line)
+        #print(" Line number giving error \n")
 
       #create nested for loop to look through table and find entries that match the current_pid
       #for mplayers in range(0,len(p_analyze)):
@@ -66,7 +70,7 @@ def search_and_talley(self,p_num):
 
         #check if for loop found year, if it did, move onto the next entry after marking it used
         if found_y == True:
-          p_analyze[mplayers][4] == 1
+          p_analyze[mplayers][4] = 1
           continue
         #if passed all of the checks, mark node as used and increase count and add year to list
         else:
@@ -82,12 +86,13 @@ def search_and_talley(self,p_num):
         pnum_count.append(list1)
 
     print(self.p[p_num])
-
+    
    # print(threading.get_ident() + " has stopped running")
 
 #search through new p_table and check var 5
 def watching():
   t_stop = False
+  time.sleep(1)
   while not t_stop:
     t = False #uncounted vars
     for line in p_analyze:
@@ -102,19 +107,20 @@ def watching():
       #could not find uncounted var
       print("Threads will stop running")
       t_stop = True
-      print(pnum_count)
-
-    
-
+      #print(pnum_count)
+ 
 class AnalyzeLongPlayerApi(Resource):
   p = [0,0,0,0,0,0,0,0,0,0]
+  
   def __init__(self):
+    pnum_count.clear()
+    p_analyze.clear()
     #create a new table to scan with another variable at the end, it will indicate whether player+year has been tallied already, 0 = no, 1 = yes
     new_table = cache.get("player_table")
     for line in new_table:
       line.append(0)
       p_analyze.append(line)
-    p_analyze.pop(0)
+    
     p_analyze.pop(0)
     print(p_analyze[0])
     #set_p_analyze(new_table)
@@ -135,99 +141,54 @@ class AnalyzeLongPlayerApi(Resource):
     check = threading.Thread(target = watching)
     check.start()
     #creating runner threads
-    for i in range(10):
-      t = threading.Thread(target = search_and_talley, args =(self, i))
-      t.start()  
-     
-
-  
+    search_and_talley(self,0)
+    #for i in range(0,4):
+     # t = threading.Thread(target = search_and_talley, args =(self, i))
+      #t.start()  
     
+    #pnum_count.pop(0)
 
-  #should return top ten players who have played in the NBA the longest
+
+  #should return top 100 players who have played in the NBA the longest
   def get(self):
-    pnum_count.pop(0)
+    
+    a = sorted(pnum_count, key = itemgetter(1), reverse=True)
+    #years_count.pop(0)
+    #reset vars
+    #years in league and number of players with that
+    years_count = [[1,0],[2,0],[3,0],[4,0],[5,0],[6,0],[7,0],[8,0],[9,0],[10,0],[11,0]] 
+    
+    for i in a:
+       
+      test = i[1]-1
+      try:
+        years_count[test][1] +=1
+      except IndexError:
+        print("Index gives an error")
+        print(test)
+        print('\n')
+      #for j in range(1,len(years_count)):
+        #comparing if player's year equals year count
+       # if i[1] == years_count[j][0]:
+         # years_count[j][1]+=1
+         # break
+      
+    #insertionSort(pnum_count, lock)
+    #for i in pnum_count:
+      #for j in i:
+        #print(j)
+      #print("\n")
+    
+    #print("\n")
     return {
       'resultStatus': 'SUCCESS',
-      'message': pnum_count
+      'message': years_count
       }
 
   def post(self):
     print(self)
-    parser = reqparse.RequestParser()
-    parser.add_argument('type', type=str)
-    parser.add_argument('message', type=str)
-    parser.add_argument('field', type=str)
-    parser.add_argument('new_val', type=str)
-
-    args = parser.parse_args()
-
-    #print(args)
-    # note, the post req from frontend needs to match the strings here (e.g. 'type and 'message')
-
-    request_type = args['type']
-    request_json = args['message']
-    #try:
-     # request_field = args['field']
-      #request_new = args['new_val']
-    #except:
-     # print("No ")
-
-
-    # ret_status, ret_msg = ReturnData(request_type, request_json)
-    # currently just returning the req straight
-    ret_status = request_type
-    ret_msg = request_json
-    #if status is update, then we have two other fields
-    if ret_status == 'Update':
-      request_field = args['field']
-      request_new = args['new_val']
-    #grabbing cache to modify
-    data = [[]]
-    data = cache.get("player_table")
-
-    if ret_status == 'Add':
-      #perform addition of message to player object
-      print(ret_status)
-      print(ret_msg)
-      new_player = []
-      new_player = ret_msg.split(",")
-      #NEED TO CHECK IF WE HAVE 4 COLUMNS HERE OR BEFORE DATA IS PASSED BEFORE ADDING TO CACHE
-      print(new_player)
-      
-      data.append(new_player)
-      #updating cache with new table
-      cache.set("player_table", data)
-      
-
-    elif ret_status == 'Delete':
-      #perform deletion of object in cache corresponding to all data, player name, player id, team id, and year
-      print(ret_status)
-      print(ret_msg)
-      #can send all 4 datapoints if needed
-      remove_player = []
-      remove_player = ret_msg.split(",")
-      print(remove_player)
-      #remove_player[0] = player name, remove_player[1]=player id, remove_player[2] = team id, remove_player[3] = year
-      #search for entry(s)that correspond to values and delete row(s)
-      for list in data:
-        #compare 4 values and if they equal, delete list
-        
-        if list[3] == remove_player[3] and list[2] == remove_player[2] and list[1] == remove_player[1] and list[0] == remove_player[0]:
-          print("Player removed\n")
-          data.remove(list)
-          # #updating cache with new table
-          cache.set("player_table", data)
-           
-        else:
-          continue
-    elif ret_status == 'Edit':
-      #check and see how Jasmine wants to do this, might just call delete, then add 
-        pass
-    if ret_msg:
-      message = "Your Operation concluded."
-    else:
-      message = "No Msg"
     
-    final_ret = {"status": ret_status, "message": message}
+    
+    final_ret = {"status": "No Post", "message": "This Api does not post"}
 
     return final_ret
