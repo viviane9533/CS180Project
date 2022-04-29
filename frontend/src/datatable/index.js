@@ -23,14 +23,15 @@ export default function Datatable({ data, deleteTableRows, addTableRows, topPlay
 
     return (
     <div>
-        <button className="btn btn-outline-danger" onClick={()=>setButtonAddPopup(true)}>Add</button>
-        <a href="http://127.0.0.1:5500/index.html"><button className="btn btn-outline-danger" />Top Player</a>
+        <button className="addbutton" onClick={()=>setButtonAddPopup(true)}>Add New Player</button>
+        {/* <a href="http://127.0.0.1:5500/index.html"><button className="btn btn-outline-danger" />Top Player</a> */}
         {/* <button className="btn btn-outline-danger" value="topPlayer" onclick="javascript:window.location.href='http://127.0.0.1:5500/index.html'" /> */}
         <table className = "dataTable" cellPadding={0} cellspacing={50}>
             <thead>
                 <tr> 
                     {data[0].map((heading) => <th> {heading} </th>)}
-    
+                    <th>Edit</th>
+                    <th>Delete</th>
                 </tr>
             </thead>
             <tbody>
@@ -39,7 +40,8 @@ export default function Datatable({ data, deleteTableRows, addTableRows, topPlay
                     <tr key={index}>
                         {columns.map((column) => (<td>{row[column]}</td>
                         ))}
-                        <td><button className="btn btn-outline-danger" onClick={()=>(deleteTableRows(index))}>x</button></td>
+                         <td><button className="iconbuttons"><i class="fa-solid fa-pen-to-square"></i></button></td>
+                         <td><button className="iconbuttons" onClick={()=>(deleteTableRows(index))}><i class="fa-solid fa-trash-can"></i></button></td>
                     </tr>
                     
                 ))}
@@ -75,7 +77,7 @@ export default function Datatable({ data, deleteTableRows, addTableRows, topPlay
                         value={getSeason}
                         onChange={(e) => setSeason(e.target.value)}
                     />
-                    <button onClick={()=>addTableRows(getPlayerName, getTeamID, getPlayerID, getSeason)}>Add Player</button>
+                    <button className="addbutton" onClick={()=>addTableRows(getPlayerName, getTeamID, getPlayerID, getSeason)}>Add Player</button>
                 </form>
             </Popup>
 

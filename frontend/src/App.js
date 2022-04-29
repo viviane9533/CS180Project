@@ -1,10 +1,10 @@
 import logo from './logo.svg';
-import Datatable from "./datatable";
+import Datatable from "./datatable/index.js";
 import BarChartComponent from "./datatable/BarComponent.js";
 import './App.css';
 
 import {BarChart, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Bar} from 'recharts';
-
+import TextField from "@mui/material/TextField";
 
 import React, { useEffect, useState , Component} from 'react';
 import axios from 'axios'
@@ -13,8 +13,10 @@ import axios from 'axios'
 function App() {
 
   const [getData, setData] = useState({})
+  const [getLongestCareer, setLongestCareer] = useState({})
   const [getQuery, setQuery] = useState("")
   const [getSearchColumns, setSearchColumns] = useState([0,3])
+
 
   useEffect(()=>{
     freshData();
@@ -28,6 +30,15 @@ function App() {
       console.log(error)
     })
   }
+
+  useEffect(()=>{
+    axios.get('http://127.0.0.1:5000/flask/Export/Longest').then(response => {
+      console.log("SUCCESS", response)
+      setLongestCareer(response)
+    }).catch(error => {
+      console.log(error)
+    })
+  }, [])
  
 
   // axios.post("http://127.0.0.1:5000/flask/Import", 
@@ -85,7 +96,7 @@ function App() {
   }
 
   function search(rows) {
-    var new_rows = new Array()
+    var new_rows = []
     var j = 0
     var equals = false
 
@@ -108,21 +119,53 @@ function App() {
     return new_rows
   }
 
-    return (
-        <div className="App">
-          <p>GM FOX</p>
-          <div className = "SearchInputContainer">
-            < input type="text" className = "SearchInput" value={getQuery} onChange={(e) => setQuery(e.target.value)} />
-          </div>
-          <BarChartComponent xdata={['player1', 'player2', 'player3', 'player4', 'player5']} ydata={[20, 21, 25, 30, 40]}/>
-          <div> {getData.status === 200 ? 
-            <Datatable data={search(getData.data.message)} deleteTableRows={deleteTableRows} addTableRows={addTableRows}/>
-            :
-            <h3>LOADING</h3>}
-          </div>
-          
+  function longestCareerYears(rawData) {
+    var year_length = []
+    for (var i = 0; i < rawData.length; i++) {
+
+      console.log(rawData[0])
+      year_length[i] = rawData[i][0]
+      
+    }
+    return year_length
+  }
+
+  function longestCareerPlayers(rawData) {
+    var player_num = []
+    for (var i = 0; i < rawData.length; i++) {
+
+      console.log(rawData[0])
+      player_num[i] = rawData[i][1]
+      
+    }
+    return player_num
+  }
+
+ 
+  return (
+      <div className="App">
+        <div className = "sidebar">
+        <div><button className = "homeicon"><i class="fa-solid fa-house"></i></button></div>
+        <div><button className = "graphIcons"><i class="fa-solid fa-chart-area"></i></button></div>
+        <div><button className = "graphIcons"><i class="fa-solid fa-chart-column"></i></button></div>
+        <div><button className = "graphIcons"><i class="fa-regular fa-chart-bar"></i></button></div>
         </div>
-    );
+        <p>GM FOX</p>
+        <div className = "SearchBarContainer"> 
+        <div className = "SearchInputContainer">
+          < input type="text" className = "SearchInput" value={getQuery} onChange={(e) => setQuery(e.target.value)} />
+        </div>
+        </div>
+        {/* <BarChartComponent xdata={longestCareerYears(getLongestCareer.data.message)} ydata={longestCareerPlayers(getLongestCareer.data.message)}/> */}
+        <div> {getData.status === 200 ? 
+          <Datatable data={search(getData.data.message)} deleteTableRows={deleteTableRows} addTableRows={addTableRows}/>
+          :
+          <h3>LOADING</h3>}
+        </div>
+        
+      </div>
+  );
 }
 
 export default App;
+
