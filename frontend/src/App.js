@@ -1,16 +1,17 @@
 import logo from './logo.svg';
 import Datatable from "./datatable"
 import './App.css';
-import { SearchBar } from './components/searchBar';
-import { putton } from './components/searchBar';
-import TextField from "@mui/material/TextField";
+import Popup from "./graph_popup.js"
+import BarChartComponent from "./datatable/BarComponent.js";
+
+import {BarChart, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Bar} from 'recharts';
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 
 
 function App() {
-
+  const [getButtonGraph1Popup, setButtonGraph1Popup] = useState(false)
   const [getData, setData] = useState({})
   const [getQuery, setQuery] = useState("")
   const [getSearchColumns, setSearchColumns] = useState([0,3])
@@ -113,7 +114,7 @@ function App() {
     <div className="App">
       <div className = "sidebar">
       <div><button className = "homeicon"><i class="fa-solid fa-house"></i></button></div>
-    <div><button className = "graphIcons"><i class="fa-solid fa-chart-area"></i></button></div>
+    <div><button className = "graphIcons" onClick={()=>setButtonGraph1Popup(true)}><i class="fa-solid fa-chart-area"></i></button></div>
     <div><button className = "graphIcons"><i class="fa-solid fa-chart-column"></i></button></div>
     <div><button className = "graphIcons"><i class="fa-regular fa-chart-bar"></i></button></div>
     </div>
@@ -128,6 +129,9 @@ function App() {
         :
         <h3>LOADING</h3>}
       </div>
+      <Popup trigger={getButtonGraph1Popup} setTrigger={setButtonGraph1Popup}>
+      <BarChartComponent xdata={['player1', 'player2', 'player3', 'player4', 'player5']} ydata={[20, 21, 25, 30, 40]}/>
+        </Popup>
     </div>
   );
 }
