@@ -38,7 +38,7 @@ export default function Datatable({ data, deleteTableRows, addTableRows, editTab
                     <tr key={index}>
                         {columns.map((column) => (<td>{row[column]}</td>
                         ))}
-                        <td><button className="iconbuttons" onClick= {()=> {deleteTableRows(index);setButtonEditPopup(true);}} ><i class="fa-solid fa-pen-to-square"></i></button></td>
+                        <td><button className="iconbuttons" onClick= {()=> {deleteTableRows(index);setPlayerName(row[0]);setTeamID(row[1]);setPlayerID(row[2]);setSeason(row[3]);setButtonEditPopup(true);}} ><i class="fa-solid fa-pen-to-square"></i></button></td>
                         <td><button className="iconbuttons" onClick={()=>(deleteTableRows(index))}><i class="fa-solid fa-trash-can"></i></button></td>
 
                     </tr>
@@ -85,13 +85,16 @@ export default function Datatable({ data, deleteTableRows, addTableRows, editTab
                     <label> Player name: </label>
                     <input
                         type="text"
-                        required
+                        defaultValue = {getPlayerName}
+                        placeholder = {getPlayerName}
                         value={getPlayerName}
                         onChange={(e) => setPlayerName(e.target.value)}
                     />
                     <label> Team ID: </label>
                     <input
                         type="text"
+                        defaultValue = {setTeamID}
+                        placeholder = {setTeamID}
                         required
                         value={getTeamID}
                         onChange={(e) => setTeamID(e.target.value)}
@@ -99,6 +102,8 @@ export default function Datatable({ data, deleteTableRows, addTableRows, editTab
                     <label> Player ID: </label>
                     <input
                         type="text"
+                        defaultValue = {setPlayerID}
+                        placeholder = {setPlayerID}
                         required
                         value={getPlayerID}
                         onChange={(e) => setPlayerID(e.target.value)}
@@ -106,6 +111,8 @@ export default function Datatable({ data, deleteTableRows, addTableRows, editTab
                     <label> Season: </label>
                     <input
                         type="text"
+                        defaultValue = {setSeason}
+                        placeholder = {setSeason}
                         required
                         value={getSeason}
                         onChange={(e) => setSeason(e.target.value)}
