@@ -70,41 +70,23 @@ atexit.register(updateDB)
 #         pass
 #     return "Unable to read file"
 
-@app.route("/Export", defaults={'path':''})
-def serve3(path):
-    return send_from_directory(app.static_folder,'index.html')
-api.add_resource(AnalyzeLongPlayerApi, '/flask/Export/Longest')
+#@app.route("/Export", defaults={'path':''})
+#def serve3(path):
+#    return send_from_directory(app.static_folder,'index.html')
+#api.add_resource(AnalyzeLongPlayerApi, '/flask/Export/Longest')
+ 
 
-@app.route("/add_player", methods=["POST"], strict_slashes=False)
-def add_articles():
-    new_player = []
-    new_player = request.json['new_player']
-    playerData.append(new_player)
-    request_data = request.get_json()
-    name = request_data['Student Name'] 
-    course = request_data['Course'] 
-    python_version = request_data['Test Marks']['Mathematics'] 
-    example = request_data['Course Interested'][0]
-    return '''
-     The student name is: {}
-The course applied for is: {}
-The test marks for Mathematics is: {}
-The Course student is interested in is: {}'''.format(name, course, python_version, example)
-
-    #return "Added new player"
-    
-
-
-
-@app.route("/Import", defaults={'path':''})
-def serve2(path):
-    return send_from_directory(app.static_folder,'index.html')
-api.add_resource(ImportDataApi, '/flask/Import')
-api.add_resource(ImportTeamDataApi, '/flask/Import_Team')
+#@app.route("/Import", defaults={'path':''})
+#def serve2(path):
+#    return send_from_directory(app.static_folder,'index.html')
+#api.add_resource(ImportDataApi, '/flask/Import')
+#api.add_resource(ImportTeamDataApi, '/flask/Import_Team')
 
 
 @app.route("/", defaults={'path':''})
 def serve(path):
     return send_from_directory(app.static_folder,'index.html')
-
+api.add_resource(AnalyzeLongPlayerApi, '/flask/Export/Longest')
+api.add_resource(ImportDataApi, '/flask/Import')
+api.add_resource(ImportTeamDataApi, '/flask/Import_Team')
 api.add_resource(HelloApiHandler, '/flask/hello')
