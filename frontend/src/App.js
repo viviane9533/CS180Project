@@ -3,6 +3,7 @@ import Datatable from "./datatable/index.js";
 import Popup from "./graph_popup.js"
 import BarChartComponent from "./datatable/BarComponent.js";
 import './App.css';
+import Pagination from './pagination';
 
 import {BarChart, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Bar} from 'recharts';
 
