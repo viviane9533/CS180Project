@@ -53,7 +53,6 @@ import {BarChart, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Bar} from 'recha
             if (active) {
               return (
                 <div className="custom-tooltip">
-                    <p className="desc">Analysis of NBA Players' Career Length</p>
                     <p className="label">{`${label} ${'years'}: ${payload[0].value}  ${' players'}`}</p>
                     <p className="intro">{`${payload[0].value} ${getIntroOfPage(label)}`}</p>
 
@@ -73,11 +72,11 @@ import {BarChart, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Bar} from 'recha
             // data = {data}
             margin={{
             top: 5,
-            right: 130,
-            left: 180,
+            right: 1200,
+            left: -20,
             bottom: 5,
             }}
-            barSize={50}
+            barSize={30}
         >
     
             <Bar dataKey="player_numbers" fill="#8884d8" background={{ fill: "#eee" }} />
@@ -85,7 +84,7 @@ import {BarChart, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Bar} from 'recha
             <XAxis
             dataKey="name"
             scale="point"
-            padding={{ left: 110, right: 110 }}
+            padding={{ left: 50, right: 30 }}
             />
             <YAxis />
             <Tooltip content={<CustomTooltip />} />
