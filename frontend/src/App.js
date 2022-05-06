@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import Datatable from "./datatable/index.js";
 import BarChartComponent from "./datatable/BarComponent.js";
+import Bar_game from "./datatable/Bar_game.js";
 import './App.css';
 import Popup from "./graph_popup.js"
 
@@ -14,17 +15,18 @@ import axios from 'axios'
 function App() {
 
   const [getButtonGraph1Popup, setButtonGraph1Popup] = useState(false)
+  const [getButtonGraph2Popup, setButtonGraph2Popup] = useState(false)
   const [getData, setData] = useState({})
   const [getLongestCareer, setLongestCareer] = useState({})
+  const [getGamesPlayed, setGamesPlayed] = useState({})
   const [getQuery, setQuery] = useState("")
   const [getSearchColumns, setSearchColumns] = useState([0,3])
 
 
 
-  useEffect(()=>{
-    freshData();
-  }, [])
-  
+  // get data part
+
+  // first part
   function freshData() {
     axios.get('http://127.0.0.1:5000/flask/Import').then(response => {
       console.log("SUCCESS", response)
@@ -34,8 +36,12 @@ function App() {
     })
   }
 
-  
+  useEffect(()=>{
+    freshData();
+  }, [])
 
+
+  // career part
   function freshCareerData() {
     axios.get('http://127.0.0.1:5000/flask/Export/Longest').then(response => {
       console.log("SUCCESS", response)
@@ -49,6 +55,22 @@ function App() {
     freshCareerData();
   }, [])
  
+
+  // game part
+  function freshgetGamesPlayedData() {
+    axios.get('http://127.0.0.1:5000/flask/Export/GamesPlayed').then(response => {
+      console.log("SUCCESS", response)
+      setGamesPlayed(response)
+    }).catch(error => {
+      console.log(error)
+    })
+  }
+
+  useEffect(()=>{
+    freshgetGamesPlayedData();
+  }, [])
+
+
 
   // axios.post("http://127.0.0.1:5000/flask/Import", 
   //            { type : "Add" , message : "Kobe Bryant, 1, 1, 22\n"})
@@ -154,13 +176,34 @@ function App() {
     return player_num
   }
 
+  function gamePlayer(rawData) {
+    var players = []
+    for (var i = 0; i < 10; i++) {
+
+      console.log(rawData[1])
+      players[i] = rawData[i][1]
+      
+    }
+    return players
+  }
  
+  function gameNum(rawData) {
+    var game_num = []
+    for (var i = 0; i < 10; i++) {
+
+      console.log(rawData[1])
+      game_num[i] = rawData[i][2]
+      
+    }
+    return game_num
+  }
+
   return (
       <div className="App">
         <div className = "sidebar">
         <div><button className = "homeicon"><i class="fa-solid fa-house"></i></button></div>
         <div><button className = "graphIcons" onClick={()=>setButtonGraph1Popup(true)}><i class="fa-solid fa-chart-column"></i></button></div>
-        <div><button className = "graphIcons"><i class="fa-solid fa-chart-area"></i></button></div>
+        <div><button className = "graphIcons" onClick={()=>setButtonGraph2Popup(true)}><i class="fa-solid fa-chart-area"></i></button></div>
         <div><button className = "graphIcons"><i class="fa-regular fa-chart-bar"></i></button></div>
         </div>
         <p>GM FOX</p>
@@ -178,6 +221,15 @@ function App() {
         </div>
         </Popup>
        
+
+        <Popup trigger={getButtonGraph2Popup} setTrigger={setButtonGraph2Popup}>
+          <p>TOP 10 NBA PLAYERS</p>
+        <div> {getGamesPlayed.status === 200 ? 
+          <Bar_game xdata={gamePlayer(getGamesPlayed.data.message)} ydata={gameNum(getGamesPlayed.data.message)}/>
+          :
+          <h3>LOADING</h3>}
+        </div>
+        </Popup>
 
         <div> {getData.status === 200 ? 
           <Datatable data={search(getData.data.message)} deleteTableRows={deleteTableRows} addTableRows={addTableRows}/>
