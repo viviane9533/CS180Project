@@ -3,9 +3,15 @@ from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS #comment this on deployment
 from api.HelloApiHandler import HelloApiHandler
 from api.ImportDataApi import ImportDataApi
+from api.ImportTeamDataApi import ImportTeamDataApi
+
+from flask_cors import CORS
+from api.AnalyzeLongPlayerApi import AnalyzeLongPlayerApi #comment this on deployment
+
 # Import cache
 from common import cache
 import atexit
+
 
 
 app = Flask(__name__, static_url_path='', static_folder='frontend/build')
@@ -14,10 +20,15 @@ api = Api(app)
 
 #opening 1 db
 playerData = []
+teamData = []
 
 with open('players.csv', 'r') as inputfile:
     for line in inputfile:
         playerData.append(line.split(","))
+
+with open('teams.csv', 'r') as inputfile:
+    for line in inputfile:
+        teamData.append(line.split(","))
 
 
 b = '\n'.join('\t'.join(x for x in y) for y in playerData)
@@ -26,6 +37,7 @@ b = '\n'.join('\t'.join(x for x in y) for y in playerData)
 cache.init_app(app=app, config={"CACHE_TYPE": "FileSystemCache",'CACHE_DIR': '/tmp'})
 
 cache.set("player_table", playerData)
+cache.set("team_table", teamData)
 
 
 #defining function to run on shutdown
@@ -50,13 +62,18 @@ def updateDB():
 atexit.register(updateDB)
 
 
-@app.route('/read_file', methods=['GET'])
-def read_uploaded_file():
-    try:
-        return b
-    except IOError:
-        pass
-    return "Unable to read file"
+# @app.route('/read_file', methods=['GET'])
+# def read_uploaded_file():
+#     try:
+#         return b
+#     except IOError:
+#         pass
+#     return "Unable to read file"
+
+@app.route("/Export", defaults={'path':''})
+def serve3(path):
+    return send_from_directory(app.static_folder,'index.html')
+api.add_resource(AnalyzeLongPlayerApi, '/flask/Export/Longest')
 
 @app.route("/add_player", methods=["POST"], strict_slashes=False)
 def add_articles():
@@ -83,6 +100,7 @@ The Course student is interested in is: {}'''.format(name, course, python_versio
 def serve2(path):
     return send_from_directory(app.static_folder,'index.html')
 api.add_resource(ImportDataApi, '/flask/Import')
+api.add_resource(ImportTeamDataApi, '/flask/Import_Team')
 
 
 @app.route("/", defaults={'path':''})
