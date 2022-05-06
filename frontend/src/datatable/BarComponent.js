@@ -84,7 +84,7 @@ import {BarChart, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Bar} from 'recha
             <XAxis
             dataKey="name"
             scale="point"
-            padding={{ left: 110, right: 110 }}
+            padding={{ left: 50, right: 50 }}
             />
             <YAxis />
             <Tooltip content={<CustomTooltip />} />
