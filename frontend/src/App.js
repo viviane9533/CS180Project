@@ -13,8 +13,11 @@ import axios from 'axios'
 function App() {
   const [getButtonGraph1Popup, setButtonGraph1Popup] = useState(false)
   const [getData, setData] = useState({})
+  const [getLongestCareer, setLongestCareer] = useState({})
   const [getQuery, setQuery] = useState("")
   const [getSearchColumns, setSearchColumns] = useState([0,3])
+
+  
 
   useEffect(()=>{
     freshData();
@@ -28,6 +31,19 @@ function App() {
       console.log(error)
     })
   }
+
+  function freshCareerData() {
+    axios.get('http://127.0.0.1:5000/flask/Export/Longest').then(response => {
+      console.log("SUCCESS", response)
+      setLongestCareer(response)
+    }).catch(error => {
+      console.log(error)
+    })
+  }
+
+  useEffect(()=>{
+    freshCareerData();
+  }, [])
  
 
   // axios.post("http://127.0.0.1:5000/flask/Import", 
@@ -122,6 +138,28 @@ function App() {
     return new_rows
   }
 
+  function longestCareerYears(rawData) {
+    var year_length = []
+    for (var i = 0; i < rawData.length; i++) {
+
+      console.log(rawData[0])
+      year_length[i] = rawData[i][0]
+      
+    }
+    return year_length
+  }
+
+  function longestCareerPlayers(rawData) {
+    var player_num = []
+    for (var i = 0; i < rawData.length; i++) {
+
+      console.log(rawData[0])
+      player_num[i] = rawData[i][1]
+      
+    }
+    return player_num
+  }
+
   const columns = getData[0]  
 
   return (
@@ -145,7 +183,7 @@ function App() {
       </div>
       <Popup trigger={getButtonGraph1Popup} setTrigger={setButtonGraph1Popup}>
       <p>Graph</p>
-      <BarChartComponent xdata={['player1', 'player2', 'player3', 'player4', 'player5']} ydata={[20, 21, 25, 30, 40]}/>
+      <BarChartComponent xdata={longestCareerYears(getLongestCareer.data.message)} ydata={longestCareerPlayers(getLongestCareer.data.message)}/>
         </Popup>
     </div>
   );

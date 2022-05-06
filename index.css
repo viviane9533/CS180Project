@@ -1,0 +1,48 @@
+.popup-container {
+    width: 600px;
+    background: #edf6f9;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, 0%); 
+    opacity: 0;
+    pointer-events: none;
+    transition: all 500ms cubic-bezier(0.7, 0.71, 0.3, 1.2);
+}
+
+.popup-container.active {
+    transform: translate(-50%, -50%); 
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.popup-container .chart-container {
+    width: 300px;
+}
+
+.popup-container .popup-content {
+    display: flex;
+}
+
+.popup-container .close-button {
+    width: 30px;
+    position: absolute;
+    right: 24px;
+    top: 24px;
+    transition: all 100ms ease;
+    cursor: pointer;
+}
+
+.popup-container .close-button:hover {
+    transform: scale(1.2);
+}
+
+.stats-btn {
+    padding: 12px 24px;
+    background: #24213d;
+    color: #edf6f9;
+    border: none;
+    border-radius: 8px;
+    font-size: 20px;
+    cursor: pointer;
+}
