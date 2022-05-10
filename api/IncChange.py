@@ -1,21 +1,66 @@
 from flask_restful import Api, Resource, reqparse
-from operator import itemgetter
 import json
 import threading
 import time
+from operator import itemgetter
 from common import cache
 
 #player number and count
 pnum_count = [[]]
 
-
 #base table to analyze
 p_analyze = [[]]
 #setting p_analyze
-def set_p_analyze(new_t):
-  for line in new_t:
-   p_analyze.append(line)
-  
+
+def watching():
+  t_stop = False
+  time.sleep(1)
+  while not t_stop:
+    t = False #uncounted vars
+    for line in p_analyze:
+      if line[4] == 0:
+        print("Watcher found untalled node at:", line)
+        t = True
+        break
+    if t == True:
+      print("Watcher is still watching")
+      time.sleep(10)
+    else:
+      #could not find uncounted var
+      print("Threads will stop running")
+      t_stop = True
+      #print(pnum_count)
+
+def analyze_years(self):
+    pnum_count.clear()
+    p_analyze.clear()
+    #create a new table to scan with another variable at the end, it will indicate whether player+year has been tallied already, 0 = no, 1 = yes
+    new_table = cache.get("player_table")
+    for line in new_table:
+      line.append(0)
+      p_analyze.append(line)
+    
+    p_analyze.pop(0)
+    print(p_analyze[0])
+    #set_p_analyze(new_table)
+    #cache.set("player_analyze", new_table)
+    #player ids that will be used by threads to search and talley player's years in the league
+    self.p[0] = 0
+    self.p[1] = 1
+    self.p[2] = 2
+    self.p[3] = 3
+    self.p[4] = 4
+    self.p[5] = 5
+    self.p[6] = 6
+    self.p[7] = 7
+    self.p[8] = 8
+    self.p[9] = 9
+
+    #checker to stop threads
+    check = threading.Thread(target = watching)
+    check.start()
+    #creating runner threads
+    search_and_talley(self,0)
 
 #bool var to tell threads to stop
 t_stop = False
@@ -89,90 +134,20 @@ def search_and_talley(self,p_num):
     
    # print(threading.get_ident() + " has stopped running")
 
-#search through new p_table and check var 5
-def watching():
-  t_stop = False
-  time.sleep(1)
-  while not t_stop:
-    t = False #uncounted vars
-    for line in p_analyze:
-      if line[4] == 0:
-        print("Watcher found untalled node at:", line)
-        t = True
-        break
-    if t == True:
-      print("Watcher is still watching")
-      time.sleep(10)
-    else:
-      #could not find uncounted var
-      print("Threads will stop running")
-      t_stop = True
-      #print(pnum_count)
- 
-class AnalyzeLongPlayerApi(Resource):
-  p = [0,0,0,0,0,0,0,0,0,0]
-  
-  def __init__(self):
-    pnum_count.clear()
-    p_analyze.clear()
-    #create a new table to scan with another variable at the end, it will indicate whether player+year has been tallied already, 0 = no, 1 = yes
-    new_table = cache.get("player_table")
-    for line in new_table:
-      line.append(0)
-      p_analyze.append(line)
+def sort_talley():
+    a = sorted(pnum_count, key = itemgetter(1), reverse=True)
+    #years_count.pop(0)
+    #reset vars
+    #years in league and number of players with that
+    years_count = [[1,0],[2,0],[3,0],[4,0],[5,0],[6,0],[7,0],[8,0],[9,0],[10,0],[11,0]] 
     
-    p_analyze.pop(0)
-    print(p_analyze[0])
-    #set_p_analyze(new_table)
-    #cache.set("player_analyze", new_table)
-    #player ids that will be used by threads to search and talley player's years in the league
-    self.p[0] = 0
-    self.p[1] = 1
-    self.p[2] = 2
-    self.p[3] = 3
-    self.p[4] = 4
-    self.p[5] = 5
-    self.p[6] = 6
-    self.p[7] = 7
-    self.p[8] = 8
-    self.p[9] = 9
-
-    #checker to stop threads
-    check = threading.Thread(target = watching)
-    check.start()
-    #creating runner threads
-    search_and_talley(self,0)
-    #for i in range(0,4):
-     # t = threading.Thread(target = search_and_talley, args =(self, i))
-      #t.start()  
-    
-    #pnum_count.pop(0)
-
-
-  #should return top 100 players who have played in the NBA the longest
-  def get(self):
-      #for j in range(1,len(years_count)):
-        #comparing if player's year equals year count
-       # if i[1] == years_count[j][0]:
-         # years_count[j][1]+=1
-         # break
-      
-    #insertionSort(pnum_count, lock)
-    #for i in pnum_count:
-      #for j in i:
-        #print(j)
-      #print("\n")
-    
-    #print("\n")
-    return {
-      'resultStatus': 'SUCCESS',
-      'message': cache.get("Years_Count")
-      }
-
-  def post(self):
-    print(self)
-    
-    
-    final_ret = {"status": "No Post", "message": "This Api does not post"}
-
-    return final_ret
+    for i in a:
+       
+      test = i[1]-1
+      try:
+        years_count[test][1] +=1
+      except IndexError:
+        print("Index gives an error")
+        print(test)
+        print('\n')
+    cache.set(years_count,"Years_Count")
