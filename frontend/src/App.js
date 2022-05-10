@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import Datatable from "./datatable/index.js";
 import BarChartComponent from "./datatable/BarComponent.js";
 import './App.css';
+import Popup from "./graph_popup.js"
 
 import {BarChart, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Bar} from 'recharts';
 import TextField from "@mui/material/TextField";
@@ -12,6 +13,7 @@ import axios from 'axios'
 
 function App() {
 
+  const [getButtonGraph1Popup, setButtonGraph1Popup] = useState(false)
   const [getData, setData] = useState({})
   const [getLongestCareer, setLongestCareer] = useState({})
   const [getQuery, setQuery] = useState("")
@@ -157,8 +159,8 @@ function App() {
       <div className="App">
         <div className = "sidebar">
         <div><button className = "homeicon"><i class="fa-solid fa-house"></i></button></div>
+        <div><button className = "graphIcons" onClick={()=>setButtonGraph1Popup(true)}><i class="fa-solid fa-chart-column"></i></button></div>
         <div><button className = "graphIcons"><i class="fa-solid fa-chart-area"></i></button></div>
-        <div><button className = "graphIcons"><i class="fa-solid fa-chart-column"></i></button></div>
         <div><button className = "graphIcons"><i class="fa-regular fa-chart-bar"></i></button></div>
         </div>
         <p>GM FOX</p>
@@ -167,12 +169,15 @@ function App() {
           < input type="text" className = "SearchInput" value={getQuery} onChange={(e) => setQuery(e.target.value)} />
         </div>
         </div>
-
+        <Popup trigger={getButtonGraph1Popup} setTrigger={setButtonGraph1Popup}>
+          <p>Analysis of NBA Players' Career Length</p>
         <div> {getLongestCareer.status === 200 ? 
           <BarChartComponent xdata={longestCareerYears(getLongestCareer.data.message)} ydata={longestCareerPlayers(getLongestCareer.data.message)}/>
           :
           <h3>LOADING</h3>}
         </div>
+        </Popup>
+       
 
         <div> {getData.status === 200 ? 
           <Datatable data={search(getData.data.message)} deleteTableRows={deleteTableRows} addTableRows={addTableRows}/>
