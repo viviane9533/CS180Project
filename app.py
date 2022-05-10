@@ -8,7 +8,7 @@ from api.AnalyzeLongPlayerApi import AnalyzeLongPlayerApi
 from api.AnalyzeGamesPlayedApi import AnalyzeGamesPlayedApi
 
 from flask_cors import CORS
-from api.AnalyzeLongPlayerApi import AnalyzeLongPlayerApi #comment this on deployment
+from api.IncChange import *#comment this on deployment
 
 # Import cache
 from common import cache
@@ -76,6 +76,9 @@ def updateDB():
 
 #Register the function to be called on exit
 atexit.register(updateDB)
+
+#initializing years count table
+analyze_years()
 
 
 # @app.route('/read_file', methods=['GET'])

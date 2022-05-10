@@ -15,6 +15,7 @@ p_analyze = [[]]
 def watching():
   t_stop = False
   time.sleep(1)
+  print("In Watcher")
   while not t_stop:
     t = False #uncounted vars
     for line in p_analyze:
@@ -31,7 +32,7 @@ def watching():
       t_stop = True
       #print(pnum_count)
 
-def analyze_years(self):
+def analyze_years():
     pnum_count.clear()
     p_analyze.clear()
     #create a new table to scan with another variable at the end, it will indicate whether player+year has been tallied already, 0 = no, 1 = yes
@@ -45,30 +46,23 @@ def analyze_years(self):
     #set_p_analyze(new_table)
     #cache.set("player_analyze", new_table)
     #player ids that will be used by threads to search and talley player's years in the league
-    self.p[0] = 0
-    self.p[1] = 1
-    self.p[2] = 2
-    self.p[3] = 3
-    self.p[4] = 4
-    self.p[5] = 5
-    self.p[6] = 6
-    self.p[7] = 7
-    self.p[8] = 8
-    self.p[9] = 9
+    
 
     #checker to stop threads
     check = threading.Thread(target = watching)
     check.start()
     #creating runner threads
-    search_and_talley(self,0)
+    search_and_talley()
+    sort_talley()
 
 #bool var to tell threads to stop
 t_stop = False
 #search through new player table and talley player's years in the league
-def search_and_talley(self,p_num):
+def search_and_talley():
+    print("In beginning Search and talley")
     #talley, but each will start at a different number
     
-    for line in range(p_num,len(p_analyze)):
+    for line in range(0,len(p_analyze)):
       current_pid = 0
       current_count = 0
       years = [""]
@@ -130,7 +124,7 @@ def search_and_talley(self,p_num):
         list1 = [current_pid,current_count]
         pnum_count.append(list1)
 
-    print(self.p[p_num])
+    #print(p[p_num])
     
    # print(threading.get_ident() + " has stopped running")
 
@@ -150,4 +144,4 @@ def sort_talley():
         print("Index gives an error")
         print(test)
         print('\n')
-    cache.set(years_count,"Years_Count")
+    cache.set("Years_Count",years_count)
