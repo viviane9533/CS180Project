@@ -4,6 +4,8 @@ from flask_cors import CORS #comment this on deployment
 from api.HelloApiHandler import HelloApiHandler
 from api.ImportDataApi import ImportDataApi
 from api.ImportTeamDataApi import ImportTeamDataApi
+from api.AnalyzeLongPlayerApi import AnalyzeLongPlayerApi 
+from api.AnalyzeGamesPlayedApi import AnalyzeGamesPlayedApi
 
 from flask_cors import CORS
 from api.AnalyzeLongPlayerApi import AnalyzeLongPlayerApi #comment this on deployment
@@ -21,6 +23,7 @@ api = Api(app)
 #opening 1 db
 playerData = []
 teamData = []
+playerGames =[] 
 
 with open('players.csv', 'r') as inputfile:
     for line in inputfile:
@@ -30,6 +33,18 @@ with open('teams.csv', 'r') as inputfile:
     for line in inputfile:
         teamData.append(line.split(","))
 
+#play time is in col 10, 
+with open('games_details.csv', 'r') as inputfile:
+    for line in inputfile:
+        if line[9] == '':
+            #no playtime, so skip
+            continue
+        else:
+            a = line.split(',')
+            #player id, player name, game id
+            player_temp = [a[4],a[5],a[0]]
+            #print(player_temp)
+            playerGames.append(player_temp)
 
 b = '\n'.join('\t'.join(x for x in y) for y in playerData)
 
@@ -38,6 +53,7 @@ cache.init_app(app=app, config={"CACHE_TYPE": "FileSystemCache",'CACHE_DIR': '/t
 
 cache.set("player_table", playerData)
 cache.set("team_table", teamData)
+cache.set("player_games_table", playerGames)
 
 
 #defining function to run on shutdown
@@ -70,22 +86,43 @@ atexit.register(updateDB)
 #         pass
 #     return "Unable to read file"
 
-#@app.route("/Export", defaults={'path':''})
-#def serve3(path):
-#    return send_from_directory(app.static_folder,'index.html')
-#api.add_resource(AnalyzeLongPlayerApi, '/flask/Export/Longest')
- 
+# @app.route("/Export", defaults={'path':''})
+# def serve3(path):
+#     return send_from_directory(app.static_folder,'index.html')
 
-#@app.route("/Import", defaults={'path':''})
-#def serve2(path):
-#    return send_from_directory(app.static_folder,'index.html')
-#api.add_resource(ImportDataApi, '/flask/Import')
-#api.add_resource(ImportTeamDataApi, '/flask/Import_Team')
+
+# @app.route("/add_player", methods=["POST"], strict_slashes=False)
+# def add_articles():
+#     new_player = []
+#     new_player = request.json['new_player']
+#     playerData.append(new_player)
+#     request_data = request.get_json()
+#     name = request_data['Student Name'] 
+#     course = request_data['Course'] 
+#     python_version = request_data['Test Marks']['Mathematics'] 
+#     example = request_data['Course Interested'][0]
+#     return '''
+#      The student name is: {}
+# The course applied for is: {}
+# The test marks for Mathematics is: {}
+# The Course student is interested in is: {}'''.format(name, course, python_version, example)
+
+    #return "Added new player"
+    
+
+
+
+# @app.route("/Import", defaults={'path':''})
+# def serve2(path):
+#     return send_from_directory(app.static_folder,'index.html')
+# api.add_resource(ImportDataApi, '/flask/Import')
+# api.add_resource(ImportTeamDataApi, '/flask/Import_Team')
 
 
 @app.route("/", defaults={'path':''})
 def serve(path):
     return send_from_directory(app.static_folder,'index.html')
+api.add_resource(AnalyzeGamesPlayedApi, '/flask/Export/GamesPlayed')
 api.add_resource(AnalyzeLongPlayerApi, '/flask/Export/Longest')
 api.add_resource(ImportDataApi, '/flask/Import')
 api.add_resource(ImportTeamDataApi, '/flask/Import_Team')
