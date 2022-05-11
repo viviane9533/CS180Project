@@ -2,7 +2,7 @@ from flask_restful import Api, Resource, reqparse
 import json
 import threading
 import time
-from operator import itemgetter
+from operator import itemgetter, truediv
 from common import cache
 
 #player number and count
@@ -124,12 +124,14 @@ def search_and_talley():
         list1 = [current_pid,current_count]
         pnum_count.append(list1)
 
+    #add pnum_count to cache for use later
+    cache.set("PYear_Count",pnum_count)
     #print(p[p_num])
     
    # print(threading.get_ident() + " has stopped running")
 
 def sort_talley():
-    a = sorted(pnum_count, key = itemgetter(1), reverse=True)
+    a = sorted(cache.get("PYear_Count"), key = itemgetter(1), reverse=True)
     #years_count.pop(0)
     #reset vars
     #years in league and number of players with that
@@ -145,3 +147,71 @@ def sort_talley():
         print(test)
         print('\n')
     cache.set("Years_Count",years_count)
+
+
+def incAdd(id,year):
+  print("In IncAdd")
+  player_table = cache.get("player_table")
+  year_c =0
+  #run through player_table and count how many entries with this year and this id exist, should be one for us to continue
+  for line in player_table:
+    if line[2] == id and line[3] == year:
+      print("Found 1 occurence")
+      year_c +=1
+    else:
+      continue
+  #check count, greater than 1, we do nothing
+  if year_c == 1:
+    #check if player exists in PYear_Count
+    pyear_table = cache.get("PYear_Count")
+    id_there = False
+    print("Going to find line in pyear_table")
+    for line in pyear_table:
+      if line[0] == id:
+        #check to let function know it exists
+        id_there = True
+        #store year, add one to it and update pyear_table, update cache, break
+        playtime = line[1]
+        line[1] +=1
+        cache.set("PYear_Count", pyear_table)
+        print(playtime)
+        print(line[1])
+        updateSort(playtime, playtime+1)
+        break
+
+        
+    #if False, id did not exist, we need to add, add 1 to count, send to update sort
+    if id_there == False:
+      temp = [id, 1]
+      pyear_table.append(temp)
+      cache.set("PYear_Count", pyear_table)
+      updateSort(0,1)
+
+def updateSort(y1,y2):
+  #sent 2 year vals, one before change, one after change
+  #if this is the case, have two vals to change, decrease y1 and increase y2
+  y_count = cache.get("Years_Count")
+  if y1 !=0:
+    print("In updated sort")
+    d1 = False
+    d2 = False
+    for line in y_count:
+      if line[0] == y1:
+        print(line[1])
+        line[1]  -=1
+        print(line[1])
+        d1 = True
+      elif line[0] == y2:
+        print(line[1])
+        line[1] +=1
+        print(line[1])
+        d2 = True
+      if d1 == True and d2 == True:
+        break
+  else:
+    for line in y_count:
+      if line[1] == y2:
+        line[2]  +=1
+        break
+  print(y_count)
+  cache.set("Years_Count", y_count)

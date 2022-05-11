@@ -2,7 +2,7 @@ from urllib import request
 from flask_restful import Api, Resource, reqparse
 import json
 from common import cache
-
+from api.IncChange import *
 
 class ImportDataApi(Resource):
 
@@ -59,7 +59,7 @@ class ImportDataApi(Resource):
       data.append(new_player)
       #updating cache with new table
       cache.set("player_table", data)
-      
+      incAdd(new_player[2], new_player[3])
 
     elif ret_status == 'Delete':
       #perform deletion of object in cache corresponding to all data, player name, player id, team id, and year
