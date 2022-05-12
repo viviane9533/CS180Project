@@ -42,7 +42,7 @@ with open('games_details.csv', 'r') as inputfile:
         else:
             a = line.split(',')
             #player id, player name, game id
-            player_temp = [a[4],a[5],a[0]]
+            player_temp = [a[4],a[5],a[0], a[27]]
             #print(player_temp)
             playerGames.append(player_temp)
 
