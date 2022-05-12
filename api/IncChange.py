@@ -187,11 +187,52 @@ def incAdd(id,year):
       cache.set("PYear_Count", pyear_table)
       updateSort(0,1)
 
+def incDelete(id,year):
+  print("In IncDelete")
+  player_table = cache.get("player_table")
+  year_c =0
+  #run through player_table and count how many entries with this year and this id exist
+  #if one still exists, do nothing, but if year_c = 0, continue
+  for line in player_table:
+    if line[2] == id and line[3] == year:
+      print("Found 1 occurence")
+      year_c +=1
+    else:
+      continue
+  #check count, greater than 0, we do nothing
+  if year_c == 0:
+    #check if player exists in PYear_Count
+    pyear_table = cache.get("PYear_Count")
+    id_remove = False
+    remove_index = 0
+    print("Going to find line in pyear_table in inc_delete")
+    for index in range(len(pyear_table)):
+      if pyear_table[index][0] == id:        
+        #store year, add one to it and update pyear_table, update cache, break
+        playtime = pyear_table[index][1]
+        if pyear_table[index][1]-1 <=0:
+          id_remove = True
+          remove_index = index
+        
+        pyear_table[index][1] -=1
+        cache.set("PYear_Count", pyear_table)
+        print(playtime)
+        print(pyear_table[index][1])
+        updateSort(playtime, playtime-1)
+        break
+    #if False, id did not exist, we need to add, add 1 to count, send to update sort
+    if id_remove == True:
+      
+      pyear_table.pop(remove_index)
+      cache.set("PYear_Count", pyear_table)
+
+        
+    
 def updateSort(y1,y2):
   #sent 2 year vals, one before change, one after change
   #if this is the case, have two vals to change, decrease y1 and increase y2
   y_count = cache.get("Years_Count")
-  if y1 !=0:
+  if y1 !=0 and y2 !=0:
     print("In updated sort")
     d1 = False
     d2 = False
@@ -208,10 +249,17 @@ def updateSort(y1,y2):
         d2 = True
       if d1 == True and d2 == True:
         break
-  else:
+  elif y1 == 0 and y2 !=0:
+    #just adding one entry
     for line in y_count:
       if line[1] == y2:
         line[2]  +=1
+        break
+  elif y1 !=0 and y2 ==0:
+    #just removing one entry
+    for line in y_count:
+      if line[1] == y1:
+        line[2]  -=1
         break
   print(y_count)
   cache.set("Years_Count", y_count)

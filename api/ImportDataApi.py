@@ -79,7 +79,7 @@ class ImportDataApi(Resource):
           data.remove(list)
           # #updating cache with new table
           cache.set("player_table", data)
-          
+          incDelete(remove_player[2], remove_player[3])
         else:
           continue
     elif ret_status == 'Update':
