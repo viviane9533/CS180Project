@@ -55,28 +55,24 @@ export default function Datatable({ data, deleteTableRows, addTableRows, editTab
                     <input
                         type="text"
                         required
-                        value={getPlayerName}
                         onChange={(e) => setPlayerName(e.target.value)}
                     />
                     <label> Team ID: </label>
                     <input
                         type="text"
                         required
-                        value={getTeamID}
                         onChange={(e) => setTeamID(e.target.value)}
                     />
                     <label> Player ID: </label>
                     <input
                         type="text"
                         required
-                        value={getPlayerID}
                         onChange={(e) => setPlayerID(e.target.value)}
                     />
                     <label> Season: </label>
                     <input
                         type="text"
                         required
-                        value={getSeason}
                         onChange={(e) => setSeason(e.target.value)}
                     />
                     <button className="addbutton" onClick={()=>addTableRows(getPlayerName, getTeamID, getPlayerID, getSeason)}>Add Player</button>

@@ -5,6 +5,7 @@ import BarChartComponent from "./datatable/BarComponent.js";
 import Bar_game from "./datatable/Bar_game.js";
 import './App.css';
 import MVP from './MVP.js';
+import Home from './Home.js';
 import Popup from "./graph_popup.js"
 
 import { BrowserRouter as Router, Routes, Route, Link} from "react-router-dom"
@@ -307,12 +308,14 @@ function App() {
 
   return (
       <div className="App">
-      <Router>
+      <Router >
         <div>
+          <Link to="/">Home</Link>
           <Link to="/MVP">MVP</Link>
         </div>
         <Routes>
-          <Route path='/MVP' element={<MVP/>} />
+          <Route path='/' element={<Home />} />
+          <Route path='/MVP' element={<MVP />} />
         </Routes>
       </Router>
         <div className = "sidebar">
@@ -322,12 +325,12 @@ function App() {
         <div><button className = "graphIcons" onClick={()=>setButtonGraph3Popup(true)}><i class="fa-regular fa-chart-bar"></i></button></div>
         
         </div>
-        <p>GM FOX</p>
+        {/* <p>GM FOX</p>
         <div className = "SearchBarContainer"> 
         <div className = "SearchInputContainer">
           < input type="text" className = "SearchInput" value={getQuery} onChange={(e) => setQuery(e.target.value)} />
         </div>
-        </div>
+        </div> */}
         <Popup trigger={getButtonGraph1Popup} setTrigger={setButtonGraph1Popup}>
           <p>Analysis of NBA Players' Career Length</p>
         <div> {getLongestCareer.status === 200 ? 
@@ -364,7 +367,7 @@ function App() {
         </PieChart>
         </Popup>
 
-        <div> {getData.status === 200 ? 
+        {/* <div> {getData.status === 200 ? 
           <Datatable data={search(getData.data.message)} deleteTableRows={deleteTableRows} addTableRows={addTableRows} editTableRows={editTableRows}/>
           :
           <h3>LOADING</h3>}
@@ -374,7 +377,7 @@ function App() {
           <MVPDatatable data={getMVPData.data.message} />
           :
           <h3>LOADING</h3>}
-        </div>
+        </div> */}
 
       </div>
   );
