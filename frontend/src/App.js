@@ -1,14 +1,13 @@
 import logo from './logo.svg';
 import Datatable from "./datatable/index.js";
+import MVPDatatable from "./datatable/MVPtable.js";
 import BarChartComponent from "./datatable/BarComponent.js";
 import Bar_game from "./datatable/Bar_game.js";
-import PieChartComponent from "./datatable/PieChartComponent.js";
 import './App.css';
+import MVP from './MVP.js';
 import Popup from "./graph_popup.js"
 
-import {BarChart, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Bar} from 'recharts';
-import TextField from "@mui/material/TextField";
-
+import { BrowserRouter as Router, Routes, Route, Link} from "react-router-dom"
 import React, { useEffect, useState , Component, useCallback } from 'react';
 import axios from 'axios'
 
@@ -23,8 +22,9 @@ function App() {
   const [getButtonGraph1Popup, setButtonGraph1Popup] = useState(false)
   const [getButtonGraph2Popup, setButtonGraph2Popup] = useState(false)
   const [getButtonGraph3Popup, setButtonGraph3Popup] = useState(false)
-  const [getButtonGraph4Popup, setButtonGraph4Popup] = useState(false)
+  const [getButtonMVPPopup, setButtonMVPPopup] = useState(false)
   const [getData, setData] = useState({})
+  const [getMVPData, setMVPData] = useState({})
   const [getLongestCareer, setLongestCareer] = useState({})
   const [getGamesPlayed, setGamesPlayed] = useState({})
   const [getQuery, setQuery] = useState("")
@@ -48,6 +48,19 @@ function App() {
     freshData();
   }, [])
 
+  // MVP
+  function freshMVPData() {
+    axios.get('http://127.0.0.1:5000/flask/Export/GameMVP').then(response => {
+      console.log("SUCCESS", response)
+      setMVPData(response)
+    }).catch(error => {
+      console.log(error)
+    })
+  }
+
+  useEffect(()=>{
+    freshMVPData();
+  }, [])
 
   // career part
   function freshCareerData() {
@@ -294,8 +307,16 @@ function App() {
 
   return (
       <div className="App">
+      <Router>
+        <div>
+          <Link to="/MVP">MVP</Link>
+        </div>
+        <Routes>
+          <Route path='/MVP' element={<MVP/>} />
+        </Routes>
+      </Router>
         <div className = "sidebar">
-        <div><button className = "homeicon"><i class="fa-solid fa-house"></i></button></div>
+        <div><button className = "homeicon" onClick={()=>getButtonMVPPopup(true)}><i class="fa-solid fa-house"></i></button></div>
         <div><button className = "graphIcons" onClick={()=>setButtonGraph1Popup(true)}><i class="fa-solid fa-chart-column"></i></button></div>
         <div><button className = "graphIcons" onClick={()=>setButtonGraph2Popup(true)}><i class="fa-solid fa-chart-area"></i></button></div>
         <div><button className = "graphIcons" onClick={()=>setButtonGraph3Popup(true)}><i class="fa-regular fa-chart-bar"></i></button></div>
@@ -348,6 +369,13 @@ function App() {
           :
           <h3>LOADING</h3>}
         </div>
+
+        <div> {getMVPData.status === 200 ? 
+          <MVPDatatable data={getMVPData.data.message} />
+          :
+          <h3>LOADING</h3>}
+        </div>
+
       </div>
   );
 }
