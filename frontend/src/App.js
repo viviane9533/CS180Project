@@ -7,7 +7,6 @@ import './App.css';
 import Popup from "./graph_popup.js"
 
 import {BarChart, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Bar} from 'recharts';
-import TextField from "@mui/material/TextField";
 
 import React, { useEffect, useState , Component, useCallback } from 'react';
 import axios from 'axios'
@@ -296,9 +295,9 @@ function App() {
       <div className="App">
         <div className = "sidebar">
         <div><button className = "homeicon"><i class="fa-solid fa-house"></i></button></div>
-        <div><button className = "graphIcons" onClick={()=>setButtonGraph1Popup(true)}><i class="fa-solid fa-chart-column"></i></button></div>
-        <div><button className = "graphIcons" onClick={()=>setButtonGraph2Popup(true)}><i class="fa-solid fa-chart-area"></i></button></div>
-        <div><button className = "graphIcons" onClick={()=>setButtonGraph3Popup(true)}><i class="fa-regular fa-chart-bar"></i></button></div>
+        <div><button className = "graphIcons" data-text = "Analysis of NBA Players' Career Length" onClick={()=>setButtonGraph1Popup(true)}><i class="fa-solid fa-chart-column"></i></button></div>
+        <div><button className = "graphIcons" data-text = "Top 10 NBA Players" onClick={()=>setButtonGraph2Popup(true)}><i class="fa-solid fa-chart-area"></i></button></div>
+        <div><button className = "graphIcons" data-text = "NBA Players Career Length Scale Chart" onClick={()=>setButtonGraph3Popup(true)}><i class="fa-regular fa-chart-bar"></i></button></div>
         
         </div>
         <p>GM FOX</p>

@@ -73,4 +73,24 @@
 .homeicon:hover {
   color: #D3D3D3;
 } 
+.graphIcons::after{
+  content: attr(data-text);
+  position: absolute;
+  margin-top: 20%;
+  font-size: 15px;
+  transform: translate(100px,-50%);
+  white-space: nowrap;
+  padding:10px;
+  border-radius: 10px;
+  background-color: white;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.5s, transform 0.5s;
+  color: #307ee5;
+}
+.graphIcons:hover::after{
+  visibility: visible;
+  transform: translate(10px,-50%);
+  opacity: 1;
+}
 
