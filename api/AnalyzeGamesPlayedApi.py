@@ -17,6 +17,7 @@ def sum_games(self, lock1):
   print(lock1)
   print(len(player_games))
   print("Arrived in Sum")
+  print(player_games[0])
   for line in player_games:
     #player_t.clear()
     #increase the count var a
@@ -60,25 +61,26 @@ class AnalyzeGamesPlayedApi(Resource):
   
   def __init__(self):
     #create a new table to scan with another variable at the end, it will indicate whether player+year has been tallied already, 0 = no, 1 = yes
-    new_table = cache.get("player_games_table")
-    player_games.clear()
-    a=0
-    for line in new_table:
-      line.append(0)
-      player_games.append(line)
-      if a==0:
-        player_games_sum.append(line)
-      a+=1
-      
+    
+    if len(player_games_sum) < 2:
+      new_table = cache.get("player_games_table")
+      player_games.clear()
+      a=0
+      for line in new_table:
+        line.append(0)
+        player_games.append(line)
+        if a==0:
+          player_games_sum.append(line)
+          a+=1
+      player_games.pop(0)
+      print(player_games_sum[0])
+      player_games_sum.pop(0)
+      print(player_games_sum[0])
+      print(player_games[0])
+      sum_games(self,0)
     
     
-    player_games.pop(0)
-    print(player_games_sum[0])
-    player_games_sum.pop(0)
-    print(player_games_sum[0])
     
-    print(player_games[0])
-    sum_games(self,0)
     #set_p_analyze(new_table)
   
     
@@ -91,7 +93,9 @@ class AnalyzeGamesPlayedApi(Resource):
 
   #should return top 100 players who have played in the NBA the longest
   def get(self):
-   
+    #for t in range(len(player_games_sum)):
+
+      #print(player_games_sum[t][2])
     a = sorted(player_games_sum, key = itemgetter(2), reverse=True)
     b = a[:20]
     #years_count.pop(0)
