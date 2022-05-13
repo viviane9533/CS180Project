@@ -2,20 +2,28 @@ import logo from './logo.svg';
 import Datatable from "./datatable/index.js";
 import BarChartComponent from "./datatable/BarComponent.js";
 import Bar_game from "./datatable/Bar_game.js";
+import PieChartComponent from "./datatable/PieChartComponent.js";
 import './App.css';
 import Popup from "./graph_popup.js"
 
 import {BarChart, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Bar} from 'recharts';
 import TextField from "@mui/material/TextField";
 
-import React, { useEffect, useState , Component} from 'react';
+import React, { useEffect, useState , Component, useCallback } from 'react';
 import axios from 'axios'
+
+
+
+
+import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
 
 
 function App() {
 
   const [getButtonGraph1Popup, setButtonGraph1Popup] = useState(false)
   const [getButtonGraph2Popup, setButtonGraph2Popup] = useState(false)
+  const [getButtonGraph3Popup, setButtonGraph3Popup] = useState(false)
+  const [getButtonGraph4Popup, setButtonGraph4Popup] = useState(false)
   const [getData, setData] = useState({})
   const [getLongestCareer, setLongestCareer] = useState({})
   const [getGamesPlayed, setGamesPlayed] = useState({})
@@ -26,7 +34,7 @@ function App() {
 
   // get data part
 
-  // first part
+  // search table part
   function freshData() {
     axios.get('http://127.0.0.1:5000/flask/Import').then(response => {
       console.log("SUCCESS", response)
@@ -71,25 +79,7 @@ function App() {
   }, [])
 
 
-
-  // axios.post("http://127.0.0.1:5000/flask/Import", 
-  //            { type : "Add" , message : "Kobe Bryant, 1, 1, 22\n"})
-  //         .then(function (response) {
-  //           console.log(response);
-  //         })
-  //         .catch(function (error) {
-  //           console.log(error);
-  //         });
-
-  // axios.post("http://127.0.0.1:5000/flask/Import", 
-  //           { type : "Delete" , message : "Zichao Bryant, 1, 1, 22\n"})
-  //         .then(function (response) {
-  //           console.log(response);
-  //         })
-  //         .catch(function (error) {
-  //           console.log(error);
-  //         });
-
+  // delete part
   const deleteTableRows = (index)=>{
     var b = getData.data.message[index]
     var a = ''
@@ -112,7 +102,7 @@ function App() {
   }
 
   
-
+  // add part
   const addTableRows = (new_name, new_team_id, new_player_id, new_season)=>{
     var a = new_name + ',' + new_team_id + ',' + new_player_id + ','+ new_season + '\n'
 
@@ -128,7 +118,21 @@ function App() {
           freshData()
   }
 
-  
+  // edit part
+  const editTableRows = (new_name, new_team_id, new_player_id, new_season)=>{
+    var a = new_name + ',' + new_team_id + ',' + new_player_id + ','+ new_season + '\n'
+
+    axios.post("http://127.0.0.1:5000/flask/Import", 
+              { type : "Add" , message : a })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+          freshData()
+  }
 
   function search(rows) {
     var new_rows = []
@@ -198,13 +202,104 @@ function App() {
     return game_num
   }
 
+  // Pie chart
+  const renderActiveShape = (props: any) => {
+    const RADIAN = Math.PI / 180;
+    const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent, value } = props;
+    const sin = Math.sin(-RADIAN * midAngle);
+    const cos = Math.cos(-RADIAN * midAngle);
+    const sx = cx + (outerRadius + 10) * cos;
+    const sy = cy + (outerRadius + 10) * sin;
+    const mx = cx + (outerRadius + 30) * cos;
+    const my = cy + (outerRadius + 30) * sin;
+    const ex = mx + (cos >= 0 ? 1 : -1) * 22;
+    const ey = my;
+    const textAnchor = cos >= 0 ? "start" : "end";
+  
+    return (
+      <g>
+        <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
+          {/* {payload.name} */}
+          {`${payload.name}-YEAR GROUP`}
+        </text>
+        <Sector
+          cx={cx}
+          cy={cy}
+          innerRadius={innerRadius}
+          outerRadius={outerRadius}
+          startAngle={startAngle}
+          endAngle={endAngle}
+          fill={fill}
+        />
+        <Sector
+          cx={cx}
+          cy={cy}
+          startAngle={startAngle}
+          endAngle={endAngle}
+          innerRadius={outerRadius + 6}
+          outerRadius={outerRadius + 10}
+          fill={fill}
+        />
+        <path
+          d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`}
+          stroke={fill}
+          fill="none"
+        />
+        <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
+        <text
+          x={ex + (cos >= 0 ? 1 : -1) * 12}
+          y={ey}
+          textAnchor={textAnchor}
+          fill="#333"
+        >{`#players: ${value}`}</text>
+        <text
+          x={ex + (cos >= 0 ? 1 : -1) * 12}
+          y={ey}
+          dy={18}
+          textAnchor={textAnchor}
+          fill="#999"
+        >
+          {`(Rate ${(percent * 100).toFixed(2)}%)`}
+        </text>
+      </g>
+    );
+  };
+  const [activeIndex, setActiveIndex] = useState(0);
+  const onPieEnter = useCallback(
+    (_, index) => {
+      setActiveIndex(index);
+    },
+    [setActiveIndex]
+  );
+  function PieData(xdata, ydata) {
+    // console.log("%d",xdata.length)
+    // console.log(xdata)
+    var data = []
+    for (var i = 0; i < xdata.length; i++) {
+        var a = {name: xdata[i], value: ydata[i]}
+        data[i] = a
+        // console.log(a)
+    }
+    return data
+  }
+  var run_once = true
+  while (getLongestCareer.status == 200 && run_once) {
+    var xdata = longestCareerYears(getLongestCareer.data.message)
+    var ydata = longestCareerPlayers(getLongestCareer.data.message)
+    var data1 = PieData(xdata, ydata)
+    run_once = false
+  }
+
+
+
   return (
       <div className="App">
         <div className = "sidebar">
         <div><button className = "homeicon"><i class="fa-solid fa-house"></i></button></div>
         <div><button className = "graphIcons" onClick={()=>setButtonGraph1Popup(true)}><i class="fa-solid fa-chart-column"></i></button></div>
         <div><button className = "graphIcons" onClick={()=>setButtonGraph2Popup(true)}><i class="fa-solid fa-chart-area"></i></button></div>
-        <div><button className = "graphIcons"><i class="fa-regular fa-chart-bar"></i></button></div>
+        <div><button className = "graphIcons" onClick={()=>setButtonGraph3Popup(true)}><i class="fa-regular fa-chart-bar"></i></button></div>
+        
         </div>
         <p>GM FOX</p>
         <div className = "SearchBarContainer"> 
@@ -220,7 +315,6 @@ function App() {
           <h3>LOADING</h3>}
         </div>
         </Popup>
-       
 
         <Popup trigger={getButtonGraph2Popup} setTrigger={setButtonGraph2Popup}>
           <p>TOP 10 NBA PLAYERS</p>
@@ -231,12 +325,29 @@ function App() {
         </div>
         </Popup>
 
+        <Popup trigger={getButtonGraph3Popup} setTrigger={setButtonGraph3Popup}>
+          <p>NBA PLAYERS CAREER LENGTH SCALE CHART</p>
+        <PieChart width={1000} height={400}>
+        <Pie
+          activeIndex={activeIndex}
+          activeShape={renderActiveShape}
+          data={data1}
+          cx={300}
+          cy={200}
+          innerRadius={80}
+          outerRadius={120}
+          fill="#8884d8"
+          dataKey="value"
+          onMouseEnter={onPieEnter}
+        />
+        </PieChart>
+        </Popup>
+
         <div> {getData.status === 200 ? 
-          <Datatable data={search(getData.data.message)} deleteTableRows={deleteTableRows} addTableRows={addTableRows}/>
+          <Datatable data={search(getData.data.message)} deleteTableRows={deleteTableRows} addTableRows={addTableRows} editTableRows={editTableRows}/>
           :
           <h3>LOADING</h3>}
         </div>
-        
       </div>
   );
 }

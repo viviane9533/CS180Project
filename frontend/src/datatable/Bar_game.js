@@ -19,7 +19,7 @@ import {BarChart, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Bar, Label, Cell
               return (
                 <div className="custom-tooltip">
                     <p className="label">{`${label} : ${payload[0].value}  ${' matches'}`}</p>
-                    <p className="intro">{`${label} ${' has played '} ${payload[0].value} ${ ' games so far in 2019'}`}</p>
+                    <p className="intro">{`${label} ${' has played '} ${payload[0].value} ${ ' games since 10/07/2003'}`}</p>
 
                 </div>
               );
@@ -38,7 +38,7 @@ import {BarChart, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Bar, Label, Cell
             top: 5,
             right: 900,
             left: 0,
-            bottom: 5,
+            bottom: 15,
             }}
             barSize={30}
         >
