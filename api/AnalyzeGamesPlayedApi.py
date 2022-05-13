@@ -8,6 +8,7 @@ from common import cache
 player_games = [[]]
 player_games_sum = [[]]
 
+
 def sum_games(self, lock1):
   #temporary player that will be added to player_games_sum
   
@@ -51,6 +52,7 @@ def sum_games(self, lock1):
     #now we are done with the outer loop and all of the player entries should exist in the program
   print(player_games_sum[0])
   player_games_sum.pop(0)
+  cache.set("Games", sorted(player_games_sum, key = itemgetter(2), reverse=True))
 
 
 
@@ -74,7 +76,7 @@ class AnalyzeGamesPlayedApi(Resource):
           a+=1
       player_games.pop(0)
       print(player_games_sum[0])
-      player_games_sum.pop(0)
+      
       print(player_games_sum[0])
       print(player_games[0])
       sum_games(self,0)
@@ -93,17 +95,15 @@ class AnalyzeGamesPlayedApi(Resource):
 
   #should return top 100 players who have played in the NBA the longest
   def get(self):
-    #for t in range(len(player_games_sum)):
 
-      #print(player_games_sum[t][2])
-    a = sorted(player_games_sum, key = itemgetter(2), reverse=True)
-    b = a[:20]
+    #a = sorted(player_games_sum, key = itemgetter(2), reverse=True)
+    #b = a[:20]
     #years_count.pop(0)
     #reset vars
     #years in league and number of players with that
     return {
       'resultStatus': 'SUCCESS',
-      'message': b
+      'message': cache.get("Games")
       }
 
   def post(self):
