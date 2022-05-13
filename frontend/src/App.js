@@ -10,7 +10,7 @@ import TextField from "@mui/material/TextField";
 
 import React, { useEffect, useState , Component} from 'react';
 import axios from 'axios'
-
+import Select from 'react-select';
 
 function App() {
 
@@ -20,6 +20,7 @@ function App() {
   const [getLongestCareer, setLongestCareer] = useState({})
   const [getGamesPlayed, setGamesPlayed] = useState({})
   const [getQuery, setQuery] = useState("")
+  const [getFilter,setFilter] = useState("Any")
   const [getSearchColumns, setSearchColumns] = useState([0,3])
 
 
@@ -127,9 +128,49 @@ function App() {
 
           freshData()
   }
+// dropdown table
 
+const options = [
+  { value: '', label: 'any' },
+  { value: '2009', label: '2009' },
+  { value: '2010', label: '2010' },
+  { value: '2011', label: '2011' },
+  { value: '2012', label: '2012' },
+  { value: '2013', label: '2013' },
+  { value: '2014', label: '2014' },
+  { value: '2015', label: '2015' },
+  { value: '2016', label: '2016' },
+  { value: '2017', label: '2017' },
+  { value: '2018', label: '2018' },
+  { value: '2019', label: '2019' }
+]
   
+const MyComponent = () => (
+  <Select options={options} />
+)
+function yearSearch(rows) {
+  var new_rows = []
+  var j = 0
+  var equals = false
 
+  new_rows[j] = rows[0]
+
+  for (var i = 1; i < rows.length; i++) {
+      equals = false
+
+      for (var k = 0; k < getSearchColumns.length; k++) {
+        var str = rows[i][getSearchColumns[k]].toLowerCase()
+        equals = equals || str.includes(getFilter.toLowerCase())
+      }
+
+      if (equals) {
+        j = j + 1
+        new_rows[j] = rows[i]
+      }
+  }
+
+  return new_rows
+}
   function search(rows) {
     var new_rows = []
     var j = 0
@@ -207,11 +248,16 @@ function App() {
         <div><button className = "graphIcons"><i class="fa-regular fa-chart-bar"></i></button></div>
         </div>
         <p>GM FOX</p>
+      
         <div className = "SearchBarContainer"> 
         <div className = "SearchInputContainer">
           < input type="text" className = "SearchInput" value={getQuery} onChange={(e) => setQuery(e.target.value)} />
         </div>
         </div>
+        <div style={{padding: '40px'}}>
+          <Select options={options} value={options.label} onChange={(options) => setFilter(options.value)} />
+          </div>
+       
         <Popup trigger={getButtonGraph1Popup} setTrigger={setButtonGraph1Popup}>
           <p>Analysis of NBA Players' Career Length</p>
         <div> {getLongestCareer.status === 200 ? 
@@ -232,7 +278,7 @@ function App() {
         </Popup>
 
         <div> {getData.status === 200 ? 
-          <Datatable data={search(getData.data.message)} deleteTableRows={deleteTableRows} addTableRows={addTableRows}/>
+          <Datatable data={yearSearch(search(getData.data.message))} deleteTableRows={deleteTableRows} addTableRows={addTableRows}/>
           :
           <h3>LOADING</h3>}
         </div>
