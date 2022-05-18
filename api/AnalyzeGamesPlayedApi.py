@@ -69,10 +69,10 @@ class AnalyzeGamesPlayedApi(Resource):
       player_games.clear()
       a=0
       for line in new_table:
-        line.append(0)
+        line.append(int(0))
         player_games.append(line)
         if a==0:
-          player_games_sum.append(line)
+          #player_games_sum.append(line)
           a+=1
       player_games.pop(0)
       print(player_games_sum[0])
