@@ -2,12 +2,15 @@ import logo from './logo.svg';
 import Datatable from "./datatable/index.js";
 import BarChartComponent from "./datatable/BarComponent.js";
 import Bar_game from "./datatable/Bar_game.js";
+import MVPDatatable from "./datatable/MVPTable.js";
 import PieChartComponent from "./datatable/PieChartComponent.js";
 import './App.css';
+import MVP from './MVP.js';
+import Home from './Home.js';
 import Popup from "./graph_popup.js"
 
 import {BarChart, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Bar} from 'recharts';
-
+import { BrowserRouter as Router, Routes, Route, Link} from "react-router-dom"
 import React, { useEffect, useState , Component, useCallback } from 'react';
 import axios from 'axios'
 
@@ -23,6 +26,8 @@ function App() {
   const [getButtonGraph2Popup, setButtonGraph2Popup] = useState(false)
   const [getButtonGraph3Popup, setButtonGraph3Popup] = useState(false)
   const [getButtonGraph4Popup, setButtonGraph4Popup] = useState(false)
+  const [getButtonMVPPopup, setButtonMVPPopup] = useState(false)
+  const [getMVPData, setMVPData] = useState({})
   const [getData, setData] = useState({})
   const [getLongestCareer, setLongestCareer] = useState({})
   const [getGamesPlayed, setGamesPlayed] = useState({})
@@ -47,6 +52,19 @@ function App() {
     freshData();
   }, [])
 
+   // MVP
+   function freshMVPData() {
+    axios.get('http://127.0.0.1:5000/flask/Export/GameMVP').then(response => {
+      console.log("SUCCESS", response)
+      setMVPData(response)
+    }).catch(error => {
+      console.log(error)
+    })
+  }
+
+  useEffect(()=>{
+    freshMVPData();
+  }, [])
 
   // career part
   function freshCareerData() {
@@ -293,6 +311,7 @@ function App() {
 
   return (
       <div className="App">
+       
         <div className = "sidebar">
         <div><button className = "homeicon"><i class="fa-solid fa-house"></i></button></div>
         <div><button className = "graphIcons" onClick={()=>setButtonGraph1Popup(true)}><i class="fa-solid fa-chart-column"></i></button></div>
@@ -301,11 +320,21 @@ function App() {
         
         </div>
         <p>GM FOX</p>
-        <div className = "SearchBarContainer"> 
+        <Router >
+        <ul>
+        <li><a><Link to="/">Home</Link></a></li>
+        <li><a><Link to="/MVP">MVP</Link></a></li>
+        </ul>
+        <Routes>
+          <Route path='/' exact element={<Home></Home>} />
+          <Route path='/MVP' exact element={<MVP />} />
+        </Routes>
+  </Router>
+        {/*<div className = "SearchBarContainer"> 
         <div className = "SearchInputContainer">
           < input type="text" className = "SearchInput" value={getQuery} onChange={(e) => setQuery(e.target.value)} />
         </div>
-        </div>
+  </div>*/}
         <Popup trigger={getButtonGraph1Popup} setTrigger={setButtonGraph1Popup}>
           <p>Analysis of NBA Players' Career Length</p>
         <div> {getLongestCareer.status === 200 ? 
