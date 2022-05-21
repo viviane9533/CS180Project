@@ -20,8 +20,11 @@ function App() {
   const [getLongestCareer, setLongestCareer] = useState({})
   const [getGamesPlayed, setGamesPlayed] = useState({})
   const [getQuery, setQuery] = useState("")
-  const [getFilter,setFilter] = useState("Any")
+  const [getFilter,setFilter] = useState("")
+  const [getFilter2,setFilter2] = useState("")
   const [getSearchColumns, setSearchColumns] = useState([0,3])
+  const [getSearchColumns2, setSearchColumns2] = useState([1,2])
+
 
 
 
@@ -130,8 +133,8 @@ function App() {
   }
 // dropdown table
 
-const options = [
-  { value: '', label: 'any' },
+const seasons = [
+  { value: '', label: 'All Seasons' },
   { value: '2009', label: '2009' },
   { value: '2010', label: '2010' },
   { value: '2011', label: '2011' },
@@ -144,10 +147,67 @@ const options = [
   { value: '2018', label: '2018' },
   { value: '2019', label: '2019' }
 ]
+const teams = [
+  { value: '', label: 'All Teams' },
+  { value: '1610612737', label: 'Atlanta Hawks' },
+  { value: '1610612738', label: 'Boston Celtics' },
+  { value: '1610612740', label: 'New Orleans Pelicans' },
+  { value: '1610612741', label: 'Chicago Bulls' },
+  { value: '1610612742', label: 'Dallas Mavericks' },
+  { value: '1610612743', label: 'Denver Nuggets' },
+  { value: '1610612743', label: 'Houston Rockets' },
+  { value: '1610612746', label: 'Los Angeles Clippers' },
+  { value: '1610612747', label: 'Los Angeles Lakers' },
+  { value: '1610612747', label: 'Miami Heat' },
+  { value: '1610612749', label: 'Milwaukee Bucks' },
+  { value: '1610612750', label: 'Minnesota Timberwolves' },
+  { value: '1610612751', label: 'Brooklyn Nets' },
+  { value: '1610612752', label: 'New York Knicks' },
+  { value: '1610612753', label: 'Orlando Magic' },
+  { value: '1610612752', label: 'Indiana Pacers' },
+  { value: '1610612755', label: 'Philadelphia 76ers' },
+  { value: '1610612756', label: 'Phoenix Suns' },
+  { value: '1610612757', label: 'Portland Trailblazers' },
+  { value: '1610612758', label: 'Sacramento Kings' },
+  { value: '1610612759', label: 'San Antonio Spurs' },
+  { value: '1610612760', label: 'Oklahoma City Thunder' },
+  { value: '1610612761', label: 'Toronto Raptors' },
+  { value: '1610612762', label: 'Utah Jazz' },
+  { value: '1610612763', label: 'Memphis Grizzlies' },
+  { value: '1610612764', label: 'Washington Wizards' },
+  { value: '1610612765', label: 'Detroit Pistons' },
+  { value: '1610612766', label: 'Charlotte Hornets' },
+  { value: '1610612739', label: 'Cleveland Cavaliers' },
+  { value: '1610612744', label: 'Golden State Warriors' }
+
+]
   
 const MyComponent = () => (
-  <Select options={options} />
+  <Select options={seasons} />
 )
+function teamSearch(rows) {
+  var new_rows = []
+  var j = 0
+  var equals = false
+
+  new_rows[j] = rows[0]
+
+  for (var i = 1; i < rows.length; i++) {
+      equals = false
+
+      for (var k = 0; k < getSearchColumns2.length; k++) {
+        var str = rows[i][getSearchColumns2[k]].toLowerCase()
+        equals = equals || str.includes(getFilter2.toLowerCase())
+      }
+
+      if (equals) {
+        j = j + 1
+        new_rows[j] = rows[i]
+      }
+  }
+
+  return new_rows
+}
 function yearSearch(rows) {
   var new_rows = []
   var j = 0
@@ -254,8 +314,10 @@ function yearSearch(rows) {
           < input type="text" className = "SearchInput" value={getQuery} onChange={(e) => setQuery(e.target.value)} />
         </div>
         </div>
-        <div style={{padding: '40px'}}>
-          <Select options={options} value={options.label} onChange={(options) => setFilter(options.value)} />
+        <div style={{ padding: '75px', alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
+          <Select options={seasons} value={seasons.label} onChange={(seasons) => setFilter(seasons.value)} />
+          <Select options={teams} value={teams.label} onChange={(teams) => setFilter2(teams.value)} />
+
           </div>
        
         <Popup trigger={getButtonGraph1Popup} setTrigger={setButtonGraph1Popup}>
@@ -278,7 +340,7 @@ function yearSearch(rows) {
         </Popup>
 
         <div> {getData.status === 200 ? 
-          <Datatable data={yearSearch(search(getData.data.message))} deleteTableRows={deleteTableRows} addTableRows={addTableRows}/>
+          <Datatable data={teamSearch(yearSearch(search(getData.data.message)))} deleteTableRows={deleteTableRows} addTableRows={addTableRows}/>
           :
           <h3>LOADING</h3>}
         </div>

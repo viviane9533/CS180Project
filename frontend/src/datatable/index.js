@@ -41,7 +41,7 @@ export default function Datatable({ data, deleteTableRows, addTableRows, topPlay
     return (
     <div>
         <button className="addbutton" onClick={()=>setButtonAddPopup(true)}>Add New Player</button>
-        <button className="refreshData" onClick={() => refresh()}>Search</button>
+        <button className="refreshData" onClick={() => refresh()}>Refresh Data</button>
         {/* <a href="http://127.0.0.1:5500/index.html"><button className="btn btn-outline-danger" />Top Player</a> */}
         {/* <button className="btn btn-outline-danger" value="topPlayer" onclick="javascript:window.location.href='http://127.0.0.1:5500/index.html'" /> */}
         <table className = "dataTable" cellPadding={0} cellspacing={50}>
