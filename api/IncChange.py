@@ -148,18 +148,29 @@ def sort_talley():
         print('\n')
     cache.set("Years_Count",years_count)
 
+def search_ID_YEAR(group, id, year):
+  ret_value =0
+  for item in group:
+   if item[2] == id and group[3] == year:
+      print("Found 1 occurence")
+      ret_value +=1
+   else:
+     continue
+  return ret_value
+
 
 def incAdd(id,year):
   print("In IncAdd")
   player_table = cache.get("player_table")
-  year_c =0
+  year_c = search_ID_YEAR(player_table, id, year)
   #run through player_table and count how many entries with this year and this id exist, should be one for us to continue
-  for line in player_table:
-    if line[2] == id and line[3] == year:
-      print("Found 1 occurence")
-      year_c +=1
-    else:
-      continue
+  #for line in player_table:
+  #  if line[2] == id and line[3] == year:
+  #    print("Found 1 occurence")
+  #    year_c +=1
+  #  else:
+  #    continue
+
   #check count, greater than 1, we do nothing
   if year_c == 1:
     #check if player exists in PYear_Count
@@ -190,15 +201,16 @@ def incAdd(id,year):
 def incDelete(id,year):
   print("In IncDelete")
   player_table = cache.get("player_table")
-  year_c =0
+  
   #run through player_table and count how many entries with this year and this id exist
+  year_c = search_ID_YEAR(player_table, id, year)
   #if one still exists, do nothing, but if year_c = 0, continue
-  for line in player_table:
-    if line[2] == id and line[3] == year:
-      print("Found 1 occurence")
-      year_c +=1
-    else:
-      continue
+  #for line in player_table:
+  #  if line[2] == id and line[3] == year:
+  #    print("Found 1 occurence")
+  #    year_c +=1
+  #  else:
+  #    continue
   #check count, greater than 0, we do nothing
   if year_c == 0:
     #check if player exists in PYear_Count
