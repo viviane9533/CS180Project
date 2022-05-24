@@ -2,8 +2,6 @@ import React from "react"
 import '../index.css'
 import Popup from "./add_popup.js"
 import { useState } from 'react'
-import { Bar } from "react-chartjs-2";
-import { Line } from "react-chartjs-2";
 
 export default function Datatable({ data, deleteTableRows, addTableRows, editTableRows }) {
     const [getButtonAddPopup, setButtonAddPopup] = useState(false)

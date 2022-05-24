@@ -73,4 +73,39 @@
 .homeicon:hover {
   color: #D3D3D3;
 } 
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 10px;
+  border-radius: 50px;
+  margin-left: 45%;
+  margin-right: 45%;
+  overflow: hidden;
+  background-color: #307ee5;
+}
 
+ul li {
+  float: left;
+}
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  border-radius: 50px;
+  text-decoration: none;
+  padding: 7px 7px;
+  padding-left: 7px;
+}
+li a:hover:not(.active) {
+  background-color: white;
+  color:#307ee5;
+}
+li a.active {
+  background-color: white;
+  color:#307ee5;
+}
+li a:focus{
+  background-color: white;
+  color:#307ee5;
+}

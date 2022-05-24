@@ -5,18 +5,15 @@ import Bar_game from "./datatable/Bar_game.js";
 import PieChartComponent from "./datatable/PieChartComponent.js";
 import './App.css';
 import Popup from "./graph_popup.js"
+import MVP from './MVP.js';
+import Home from './Home.js';
 
-import {BarChart, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Bar} from 'recharts';
+import {BarChart, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Bar,
+        PieChart, Pie, Sector, Cell, ResponsiveContainer} from 'recharts';
+import { BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
 import TextField from "@mui/material/TextField";
-
 import React, { useEffect, useState , Component, useCallback } from 'react';
 import axios from 'axios'
-
-
-
-
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
-
 
 function App() {
 
@@ -24,13 +21,13 @@ function App() {
   const [getButtonGraph2Popup, setButtonGraph2Popup] = useState(false)
   const [getButtonGraph3Popup, setButtonGraph3Popup] = useState(false)
   const [getButtonGraph4Popup, setButtonGraph4Popup] = useState(false)
+  const [getButtonMVPPopup, setButtonMVPPopup] = useState(false)
+  const [getMVPData, setMVPData] = useState({})
   const [getData, setData] = useState({})
   const [getLongestCareer, setLongestCareer] = useState({})
   const [getGamesPlayed, setGamesPlayed] = useState({})
   const [getQuery, setQuery] = useState("")
   const [getSearchColumns, setSearchColumns] = useState([0,3])
-
-
 
   // get data part
 
@@ -48,6 +45,19 @@ function App() {
     freshData();
   }, [])
 
+  // MVP
+  function freshMVPData() {
+    axios.get('http://127.0.0.1:5000/flask/Export/GameMVP').then(response => {
+      console.log("SUCCESS", response)
+      setMVPData(response)
+    }).catch(error => {
+      console.log(error)
+    })
+  }
+
+  useEffect(()=>{
+    freshMVPData();
+  }, [])
 
   // career part
   function freshCareerData() {
@@ -203,7 +213,7 @@ function App() {
   }
 
   // Pie chart
-  const renderActiveShape = (props: any) => {
+  const renderActiveShape = (props) => {
     const RADIAN = Math.PI / 180;
     const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent, value } = props;
     const sin = Math.sin(-RADIAN * midAngle);
@@ -290,8 +300,6 @@ function App() {
     run_once = false
   }
 
-
-
   return (
       <div className="App">
         <div className = "sidebar">
@@ -301,12 +309,17 @@ function App() {
         <div><button className = "graphIcons" onClick={()=>setButtonGraph3Popup(true)}><i class="fa-regular fa-chart-bar"></i></button></div>
         
         </div>
-        <p>GM FOX</p>
-        <div className = "SearchBarContainer"> 
-        <div className = "SearchInputContainer">
-          < input type="text" className = "SearchInput" value={getQuery} onChange={(e) => setQuery(e.target.value)} />
-        </div>
-        </div>
+        <p>NBA ANALYTICS</p>
+        <Router >
+        <ul>
+        <li><a><Link to="/">Home</Link></a></li>
+        <li><a><Link to="/MVP">MVP</Link></a></li>
+        </ul>
+        <Routes>
+          <Route path='/' exact element={<Home></Home>} />
+          <Route path='/MVP' exact element={<MVP />} />
+        </Routes>
+  </Router>
         <Popup trigger={getButtonGraph1Popup} setTrigger={setButtonGraph1Popup}>
           <p>Analysis of NBA Players' Career Length</p>
         <div> {getLongestCareer.status === 200 ? 
@@ -353,4 +366,3 @@ function App() {
 }
 
 export default App;
-
