@@ -1,9 +1,10 @@
 import logo from './logo.svg';
 import Datatable from "./datatable/index.js";
+import MVPDatatable from "./datatable/MVPtable.js";
 import BarChartComponent from "./datatable/BarComponent.js";
 import Bar_game from "./datatable/Bar_game.js";
-import PieChartComponent from "./datatable/PieChartComponent.js";
 import './App.css';
+import MVP from './MVP.js';
 import Popup from "./graph_popup.js"
 import MVP from './MVP.js';
 import Home from './Home.js';
@@ -24,6 +25,7 @@ function App() {
   const [getButtonMVPPopup, setButtonMVPPopup] = useState(false)
   const [getMVPData, setMVPData] = useState({})
   const [getData, setData] = useState({})
+  const [getMVPData, setMVPData] = useState({})
   const [getLongestCareer, setLongestCareer] = useState({})
   const [getGamesPlayed, setGamesPlayed] = useState({})
   const [getQuery, setQuery] = useState("")
@@ -302,8 +304,16 @@ function App() {
 
   return (
       <div className="App">
+      <Router>
+        <div>
+          <Link to="/MVP">MVP</Link>
+        </div>
+        <Routes>
+          <Route path='/MVP' element={<MVP/>} />
+        </Routes>
+      </Router>
         <div className = "sidebar">
-        <div><button className = "homeicon"><i class="fa-solid fa-house"></i></button></div>
+        <div><button className = "homeicon" onClick={()=>getButtonMVPPopup(true)}><i class="fa-solid fa-house"></i></button></div>
         <div><button className = "graphIcons" onClick={()=>setButtonGraph1Popup(true)}><i class="fa-solid fa-chart-column"></i></button></div>
         <div><button className = "graphIcons" onClick={()=>setButtonGraph2Popup(true)}><i class="fa-solid fa-chart-area"></i></button></div>
         <div><button className = "graphIcons" onClick={()=>setButtonGraph3Popup(true)}><i class="fa-regular fa-chart-bar"></i></button></div>
@@ -361,6 +371,13 @@ function App() {
           :
           <h3>LOADING</h3>}
         </div>
+
+        <div> {getMVPData.status === 200 ? 
+          <MVPDatatable data={getMVPData.data.message} />
+          :
+          <h3>LOADING</h3>}
+        </div>
+
       </div>
   );
 }

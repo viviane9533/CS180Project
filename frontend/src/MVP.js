@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import MVPDatatable from "./datatable/MVPTable.js";
+=======
+import MVPDatatable from "./datatable/MVPtable.js";
+>>>>>>> a690e0066240d1905221ac99c79011fce997e9a3
 import React, { useEffect, useState , Component, useCallback } from 'react';
 import axios from 'axios'
 
