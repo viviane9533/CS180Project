@@ -193,7 +193,7 @@ box-shadow: 0 4px 4px rgba(83, 100, 255, 0.32);
   color: #8b8b8b;
 }
 .addbutton{
-  margin-top: 2.0em;
+  margin-top: 1.0em;
   display: inline-block;
   margin-right: 10px;
   background: #307ee5;
@@ -207,4 +207,28 @@ box-shadow: 0 4px 4px rgba(83, 100, 255, 0.32);
   transition: all 0.3s;
   width: 170px;
   text-align: center;
+}
+.refreshData{
+  margin-top: 2.0em;
+  position: absolute;
+  top: 137px;
+  right: 455px;
+  display: inline-block;
+  margin-right: 10px;
+  background: #307ee5;
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+  line-height: 38px;
+  border-radius: 50px;
+  border-color: white;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  width: 65px;
+  text-align: center;
+}
+.refreshData:hover{
+  background: #fff;
+color: #307ee5;
+box-shadow: 0 4px 4px rgba(83, 100, 255, 0.32);
 }
