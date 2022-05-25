@@ -221,7 +221,7 @@ function Home() {
           < input type="text" className = "SearchInput" value={getQuery} onChange={(e) => setQuery(e.target.value)} />
         </div>
         </div>
-        <div style={{ padding: '75px', alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
+        <div style={{ padding: '20px', alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
           <Select options={seasons} value={seasons.label} onChange={(seasons) => setFilter(seasons.value)} />
           <Select options={teams} value={teams.label} onChange={(teams) => setFilter2(teams.value)} />
 

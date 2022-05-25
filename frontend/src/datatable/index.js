@@ -42,7 +42,7 @@ export default function Datatable({ data, deleteTableRows, addTableRows, editTab
     return (
     <div>
         <button className="addbutton" onClick={()=>setButtonAddPopup(true)}>Add New Player</button>
-        <button className="refreshData" onClick={() => refresh()}>Refresh Data</button>
+        <button className="refreshData" onClick={() => refresh()}><i class="fa-solid fa-magnifying-glass"></i></button>
         <table className = "dataTable" cellPadding={0} cellspacing={50}>
             <thead>
                 <tr> 
